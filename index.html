@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中考英语词汇背诵助手</title>
+<style>/* ============ CSS Variables & Theme ============ */
+:root {
+  --primary: #2563EB; --primary-light: #DBEAFE; --primary-dark: #1E40AF;
+  --accent: #F59E0B; --accent-light: #FEF3C7;
+  --success: #10B981; --success-light: #D1FAE5;
+  --danger: #EF4444; --danger-light: #FEE2E2;
+  --bg: #F1F5F9; --card: #FFFFFF; --border: #E2E8F0;
+  --text: #1E293B; --text-secondary: #64748B; --text-muted: #94A3B8;
+  --shadow: 0 1px 3px rgba(0,0,0,.08); --shadow-md: 0 4px 12px rgba(0,0,0,.1);
+  --radius: 12px; --radius-sm: 8px; --nav-h: 60px;
+}
+[data-theme="dark"] {
+  --primary: #3B82F6; --primary-light: #1E3A5F; --primary-dark: #93C5FD;
+  --accent: #FBBF24; --accent-light: #78350F;
+  --success: #34D399; --success-light: #064E3B;
+  --danger: #F87171; --danger-light: #7F1D1D;
+  --bg: #0F172A; --card: #1E293B; --border: #334155;
+  --text: #F1F5F9; --text-secondary: #94A3B8; --text-muted: #64748B;
+}
+
+/* ============ Reset & Base ============ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;padding-top:var(--nav-h);padding-bottom:70px;transition:background .3s,color .3s}
+input,select,textarea{font-family:inherit;font-size:1rem;outline:none;border:2px solid var(--border);border-radius:var(--radius-sm);padding:.55rem .75rem;background:var(--card);color:var(--text);transition:border .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--primary)}
+button{cursor:pointer;font-family:inherit;border:none;outline:none;transition:all .2s}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ============ Top Navigation ============ */
+.top-nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;z-index:100;box-shadow:var(--shadow);gap:8px;overflow-x:auto}
+.nav-brand{display:flex;align-items:center;gap:8px;margin-right:12px;white-space:nowrap}
+.brand-icon{font-size:1.6rem}.brand-text{font-size:1.1rem;font-weight:700;color:var(--primary)}
+.nav-tabs{display:flex;gap:2px;flex:1;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nav-tab{padding:8px 14px;border-radius:8px;background:transparent;color:var(--text-secondary);font-size:.9rem;white-space:nowrap;font-weight:500;position:relative}
+.nav-tab:hover{background:var(--primary-light);color:var(--primary)}
+.nav-tab.active{background:var(--primary);color:#fff}
+.nav-actions{display:flex;gap:4px;margin-left:auto}
+.icon-btn{width:40px;height:40px;border-radius:50%;background:transparent;font-size:1.2rem;display:flex;align-items:center;justify-content:center}
+.icon-btn:hover{background:var(--border)}
+
+/* ============ Mobile Bottom Nav ============ */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);z-index:100;padding:6px 10px;justify-content:space-around;box-shadow:0 -2px 10px rgba(0,0,0,.05)}
+.mnav-tab{flex:1;padding:6px;background:transparent;font-size:1.3rem;border-radius:8px;text-align:center}
+.mnav-tab.active{background:var(--primary-light)}
+
+@media(max-width:768px){
+  .nav-tabs{display:none}.nav-brand .brand-text{display:none}
+  .mobile-nav{display:flex}body{padding-bottom:75px}
+  .top-nav{padding:0 12px}
+}
+
+/* ============ Main Content ============ */
+.main-content{max-width:1100px;margin:0 auto;padding:20px}
+.tab-content{display:none;animation:fadeIn .3s ease}
+.tab-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ============ Cards ============ */
+.card{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid var(--border)}
+.card-header{font-size:1.1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--text)}
+
+/* ============ Stats Grid ============ */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px}
+.stat-card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);text-align:center;border:1px solid var(--border)}
+.stat-value{font-size:2.2rem;font-weight:800;color:var(--primary);line-height:1.2}
+.stat-label{font-size:.85rem;color:var(--text-secondary);margin-top:4px}
+.stat-card.accent .stat-value{color:var(--accent)}
+.stat-card.success .stat-value{color:var(--success)}
+.stat-card.danger .stat-value{color:var(--danger)}
+
+/* ============ Buttons ============ */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--radius-sm);font-size:.95rem;font-weight:600;transition:all .2s}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px)}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-accent:hover{filter:brightness(1.1)}
+.btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary)}
+.btn-outline:hover{background:var(--primary-light)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-sm{padding:6px 14px;font-size:.85rem}
+.btn-lg{padding:14px 28px;font-size:1.1rem}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* ============ Word Card (Study Mode) ============ */
+.word-card{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-md);border:1px solid var(--border);cursor:pointer;transition:all .3s;position:relative;min-height:180px;user-select:none}
+.word-card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.12)}
+.word-card .word-front{}
+.word-card .word-text{font-size:1.8rem;font-weight:700;color:var(--primary)}
+.word-card .word-pos{font-size:.9rem;color:var(--text-secondary);margin:4px 0}
+.word-card .word-meaning{font-size:1.1rem;color:var(--text);margin:8px 0}
+.word-card .word-back{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.word-card.flipped .word-back{display:block}
+.word-card .colloc-item{padding:6px 0;font-size:.95rem;border-bottom:1px solid var(--border)}
+.word-card .colloc-item:last-child{border-bottom:none}
+.word-card .colloc-en{color:var(--primary);font-weight:500}
+.word-card .colloc-zh{color:var(--text-secondary);margin-left:8px;font-size:.85rem}
+.word-card .flip-hint{position:absolute;top:12px;right:16px;font-size:.75rem;color:var(--text-muted)}
+.word-card .card-index{position:absolute;top:12px;left:16px;font-size:.75rem;color:var(--text-muted);font-weight:600}
+
+/* ============ Dictation ============ */
+.dict-input{width:100%;padding:12px 16px;font-size:1.2rem;border-radius:var(--radius);text-align:center}
+.dict-feedback{padding:12px;border-radius:var(--radius-sm);text-align:center;font-weight:600;margin-top:8px;display:none}
+.dict-feedback.correct{background:var(--success-light);color:#065F46;display:block}
+.dict-feedback.wrong{background:var(--danger-light);color:#991B1B;display:block}
+.dict-word-display{font-size:2rem;font-weight:700;text-align:center;margin:20px 0;color:var(--text)}
+.dict-progress-bar{height:6px;background:var(--border);border-radius:3px;margin:12px 0;overflow:hidden}
+.dict-progress-fill{height:100%;background:var(--primary);border-radius:3px;transition:width .3s}
+.dict-score{text-align:center;font-size:1.2rem;font-weight:700;margin:12px 0}
+
+/* ============ Unit Grid ============ */
+.unit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-bottom:20px}
+.unit-btn{padding:12px 8px;border-radius:var(--radius-sm);background:var(--card);border:2px solid var(--border);font-size:.85rem;font-weight:600;text-align:center;transition:all .2s}
+.unit-btn:hover{border-color:var(--primary);background:var(--primary-light)}
+.unit-btn.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.unit-btn.completed{border-color:var(--success);background:var(--success-light)}
+.unit-btn .unit-num{font-size:.7rem;color:var(--text-muted);display:block}
+
+/* ============ Study Navigator ============ */
+.study-nav{display:flex;align-items:center;justify-content:center;gap:16px;margin:20px 0}
+.study-nav button{width:48px;height:48px;border-radius:50%;background:var(--card);border:2px solid var(--border);font-size:1.5rem;display:flex;align-items:center;justify-content:center}
+.study-nav button:hover{background:var(--primary-light);border-color:var(--primary)}
+.study-position{font-size:.95rem;color:var(--text-secondary);font-weight:500;min-width:100px;text-align:center}
+
+/* ============ Error List ============ */
+.error-item{display:flex;align-items:center;padding:12px 16px;background:var(--card);border-radius:var(--radius-sm);margin-bottom:8px;border:1px solid var(--border);gap:12px;transition:all .2s}
+.error-item:hover{box-shadow:var(--shadow)}
+.error-word{font-size:1.1rem;font-weight:700;color:var(--primary);min-width:100px}
+.error-count{font-size:.8rem;background:var(--danger-light);color:var(--danger);padding:2px 10px;border-radius:10px;font-weight:600}
+.error-actions{margin-left:auto;display:flex;gap:6px}
+
+/* ============ Calendar Heatmap ============ */
+.heatmap{display:flex;flex-wrap:wrap;gap:3px;margin:12px 0}
+.heatmap-day{width:14px;height:14px;border-radius:2px;background:var(--border);position:relative;cursor:pointer}
+.heatmap-day[data-level="1"]{background:#BBF7D0}
+.heatmap-day[data-level="2"]{background:#4ADE80}
+.heatmap-day[data-level="3"]{background:#16A34A}
+.heatmap-day[data-level="4"]{background:#166534}
+.heatmap-day:hover{transform:scale(1.5);z-index:2}
+.heatmap-day[title]:hover::after{content:attr(title);position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:2px 8px;border-radius:4px;font-size:.7rem;white-space:nowrap}
+
+/* ============ Progress Bar ============ */
+.progress-bar{height:12px;background:var(--border);border-radius:6px;overflow:hidden;margin:8px 0}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--success));border-radius:6px;transition:width .5s ease}
+.progress-label{display:flex;justify-content:space-between;font-size:.85rem;color:var(--text-secondary)}
+
+/* ============ Search ============ */
+.search-box{width:100%;padding:14px 20px;font-size:1.2rem;border-radius:var(--radius);margin-bottom:16px}
+.search-results{max-height:60vh;overflow-y:auto}
+.search-item{padding:12px 16px;background:var(--card);border-radius:var(--radius-sm);margin-bottom:8px;border:1px solid var(--border);cursor:pointer;transition:all .2s}
+.search-item:hover{border-color:var(--primary);box-shadow:var(--shadow)}
+.search-item .sword{font-size:1.1rem;font-weight:700;color:var(--primary)}
+.search-item .smeaning{color:var(--text-secondary);margin-left:8px}
+.search-item .scollocs{font-size:.85rem;color:var(--text-muted);margin-top:4px}
+
+/* ============ Modal ============ */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s}
+.modal-box{background:var(--card);border-radius:var(--radius);padding:32px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-box h3{font-size:1.3rem;margin-bottom:16px}
+
+/* ============ Toast ============ */
+.toast-container{position:fixed;top:80px;right:20px;z-index:300;display:flex;flex-direction:column;gap:8px}
+.toast{padding:12px 20px;border-radius:var(--radius-sm);color:#fff;font-weight:600;animation:slideIn .3s ease;box-shadow:var(--shadow-md);font-size:.9rem}
+.toast.success{background:var(--success)}.toast.error{background:var(--danger)}.toast.info{background:var(--primary)}
+@keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ============ Confetti ============ */
+.confetti-piece{position:fixed;width:10px;height:10px;z-index:400;animation:confettiFall 2s ease-out forwards;pointer-events:none}
+@keyframes confettiFall{0%{transform:translateY(-10vh) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* ============ Settings ============ */
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border-bottom:none}
+.toggle-switch{width:48px;height:26px;background:var(--border);border-radius:13px;position:relative;cursor:pointer;transition:background .3s}
+.toggle-switch.on{background:var(--primary)}
+.toggle-switch::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left .3s}
+.toggle-switch.on::after{left:25px}
+
+/* ============ Misc ============ */
+.badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:.75rem;font-weight:600}
+.badge-primary{background:var(--primary-light);color:var(--primary)}
+.badge-success{background:var(--success-light);color:#065F46}
+.badge-danger{background:var(--danger-light);color:#991B1B}
+.badge-accent{background:var(--accent-light);color:#92400E}
+.streak-flame{font-size:2rem;animation:pulse 1s ease infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.empty-state{text-align:center;padding:40px;color:var(--text-muted)}
+.empty-state .empty-icon{font-size:3rem;margin-bottom:12px}
+.flex-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.flex-between{display:flex;justify-content:space-between;align-items:center}
+.mt-1{margin-top:8px}.mt-2{margin-top:16px}.mt-3{margin-top:24px}.mb-1{margin-bottom:8px}.mb-2{margin-bottom:16px}
+.text-center{text-align:center}.text-sm{font-size:.85rem}.text-muted{color:var(--text-secondary)}
+</style>
+</head>
+<body data-theme="light">
+
+<!-- ===== 顶部导航 ===== -->
+<nav class="top-nav" id="topNav">
+  <div class="nav-brand">
+    <span class="brand-icon">📚</span>
+    <span class="brand-text">中考词汇助手</span>
+  </div>
+  <div class="nav-tabs" id="navTabs">
+    <button class="nav-tab active" data-tab="dashboard">🏠 仪表盘</button>
+    <button class="nav-tab" data-tab="study">📖 单元学习</button>
+    <button class="nav-tab" data-tab="dictation">✍️ 默写模式</button>
+    <button class="nav-tab" data-tab="errors">📝 错题本</button>
+    <button class="nav-tab" data-tab="plan">📅 学习计划</button>
+    <button class="nav-tab" data-tab="stats">📊 统计</button>
+    <button class="nav-tab" data-tab="search">🔍 搜索</button>
+  </div>
+  <div class="nav-actions">
+    <button class="icon-btn" id="themeToggle" title="切换主题">🌓</button>
+    <button class="icon-btn" id="settingsBtn" title="设置">⚙️</button>
+  </div>
+</nav>
+
+<!-- ===== 移动端底部导航 ===== -->
+<nav class="mobile-nav" id="mobileNav">
+  <button class="mnav-tab active" data-tab="dashboard">🏠</button>
+  <button class="mnav-tab" data-tab="study">📖</button>
+  <button class="mnav-tab" data-tab="dictation">✍️</button>
+  <button class="mnav-tab" data-tab="errors">📝</button>
+  <button class="mnav-tab" data-tab="plan">📅</button>
+</nav>
+
+<!-- ===== 主内容区 ===== -->
+<main class="main-content" id="mainContent">
+  <section class="tab-content active" id="tab-dashboard"></section>
+  <section class="tab-content" id="tab-study"></section>
+  <section class="tab-content" id="tab-dictation"></section>
+  <section class="tab-content" id="tab-errors"></section>
+  <section class="tab-content" id="tab-plan"></section>
+  <section class="tab-content" id="tab-stats"></section>
+  <section class="tab-content" id="tab-search"></section>
+</main>
+
+<!-- ===== 弹窗容器 ===== -->
+<div class="modal-overlay" id="modalOverlay" style="display:none">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<!-- ===== Toast 容器 ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ============ VOCAB DATA ============
+const VOCAB_RAW = [{"w":"ability","p":"n.","m":"能力；才能","c":[["the ability to do sth.","做某事的能力"],["have the ability for","有……的才能"]]},{"w":"able","p":"adj.","m":"能够；有能力的","c":[["be able to do sth.","能够做某事"],["be able to","会；能"]]},{"w":"about","p":"prep./adv.","m":"关于；大约","c":[["talk about","谈论"],["think about","考虑"],["How/What about...?","……怎么样？"]]},{"w":"above","p":"prep./adv.","m":"在……上方；以上","c":[["above all","最重要的是"],["above average","高于平均水平"]]},{"w":"abroad","p":"adv.","m":"在国外；到国外","c":[["go abroad","出国"],["study abroad","留学"],["at home and abroad","国内外"]]},{"w":"absent","p":"adj.","m":"缺席的；不在的","c":[["be absent from","缺席……"],["absent-minded","心不在焉的"]]},{"w":"accept","p":"v.","m":"接受；承认","c":[["accept...as...","把……当作……接受"],["accept one's invitation","接受某人的邀请"]]},{"w":"accident","p":"n.","m":"事故；意外","c":[["by accident","偶然；意外地"],["traffic accident","交通事故"],["car accident","车祸"]]},{"w":"according","p":"adv.","m":"根据；按照","c":[["according to","根据；按照"]]},{"w":"achieve","p":"v.","m":"达到；取得","c":[["achieve one's dream","实现梦想"],["achieve success","获得成功"]]},{"w":"across","p":"prep./adv.","m":"穿过；横过","c":[["go across","穿过"],["come across","偶然遇到"],["across from","在……对面"]]},{"w":"act","p":"v./n.","m":"行动；表演","c":[["act as","充当；担任"],["act out","把……表演出来"]]},{"w":"action","p":"n.","m":"行动；动作","c":[["take action","采取行动"],["in action","在活动中"]]},{"w":"active","p":"adj.","m":"积极的；活跃的","c":[["take an active part in","积极参加"],["be active in","在……方面活跃"]]},{"w":"activity","p":"n.","m":"活动","c":[["after-school activity","课外活动"],["social activity","社会活动"],["outdoor activity","户外活动"]]},{"w":"add","p":"v.","m":"增加；添加","c":[["add...to...","把……加到……上"],["add up","加起来"],["add up to","总计达"]]},{"w":"address","p":"n.","m":"地址","c":[["email address","电子邮件地址"],["home address","家庭地址"]]},{"w":"advantage","p":"n.","m":"优点；优势","c":[["take advantage of","利用"],["have an advantage over","胜过；优于"]]},{"w":"advice","p":"n.","m":"建议；忠告（不可数）","c":[["give advice","提出建议"],["take/follow one's advice","接受某人的建议"],["a piece of advice","一条建议"]]},{"w":"advise","p":"v.","m":"建议；劝告","c":[["advise sb. to do sth.","建议某人做某事"],["advise doing sth.","建议做某事"]]},{"w":"afford","p":"v.","m":"负担得起；买得起","c":[["afford to do sth.","负担得起做某事"],["can't afford","负担不起"]]},{"w":"afraid","p":"adj.","m":"害怕的；担心的","c":[["be afraid of","害怕……"],["be afraid to do sth.","害怕做某事"],["I'm afraid...","恐怕……"]]},{"w":"after","p":"prep./conj.","m":"在……之后","c":[["after all","毕竟；终究"],["look after","照顾"],["day after day","日复一日"]]},{"w":"afternoon","p":"n.","m":"下午","c":[["in the afternoon","在下午"],["this afternoon","今天下午"]]},{"w":"again","p":"adv.","m":"再一次；又","c":[["again and again","再三地；反复地"],["once again","再一次"]]},{"w":"against","p":"prep.","m":"反对；靠着","c":[["be against","反对"],["fight against","与……作斗争"],["against the wall","靠着墙"]]},{"w":"age","p":"n.","m":"年龄；时代","c":[["at the age of","在……岁时"],["for ages","很久；很长时间"],["middle age","中年"]]},{"w":"ago","p":"adv.","m":"以前","c":[["long ago","很久以前"],["a few days ago","几天前"]]},{"w":"agree","p":"v.","m":"同意；赞同","c":[["agree with sb.","同意某人"],["agree to do sth.","同意做某事"],["agree on","就……达成一致"]]},{"w":"air","p":"n.","m":"空气；空中","c":[["by air","乘飞机"],["in the open air","在户外"],["air pollution","空气污染"],["fresh air","新鲜空气"]]},{"w":"alive","p":"adj.","m":"活着的；有生气的","c":[["keep...alive","使……活着/继续"],["stay alive","存活"]]},{"w":"all","p":"adj./adv./pron.","m":"所有的；全部","c":[["all day","整天"],["all kinds of","各种各样的"],["all over","遍及"],["all right","好吧；行"],["not...at all","一点也不"],["first of all","首先"]]},{"w":"allow","p":"v.","m":"允许；准许","c":[["allow sb. to do sth.","允许某人做某事"],["allow doing sth.","允许做某事"]]},{"w":"almost","p":"adv.","m":"几乎；差不多","c":[["almost never","几乎从不"],["almost all","几乎所有"]]},{"w":"alone","p":"adj./adv.","m":"单独的；独自","c":[["leave...alone","不打扰；不理会"],["let alone","更不用说"],["live alone","独自生活"]]},{"w":"along","p":"prep./adv.","m":"沿着；一起","c":[["along with","与……一起"],["get along with","与……相处"],["walk along","沿着……走"]]},{"w":"already","p":"adv.","m":"已经","c":[["have already done","已经做了"]]},{"w":"also","p":"adv.","m":"也；同样","c":[["not only...but also...","不仅……而且……"]]},{"w":"although","p":"conj.","m":"虽然；尽管","c":[["although/though...","虽然……但是……（不与but连用）"]]},{"w":"always","p":"adv.","m":"总是；一直","c":[["as always","一如既往"],["always do sth.","总是做某事"]]},{"w":"among","p":"prep.","m":"在……之中（三者及以上）","c":[["among themselves","在他们之间"]]},{"w":"angry","p":"adj.","m":"生气的；愤怒的","c":[["be angry with sb.","生某人的气"],["be angry at/about sth.","为某事生气"]]},{"w":"animal","p":"n.","m":"动物","c":[["wild animal","野生动物"],["animal world","动物世界"]]},{"w":"another","p":"adj./pron.","m":"另一个","c":[["one after another","一个接一个"],["one another","互相"],["another one","另一个"]]},{"w":"answer","p":"n./v.","m":"回答；答案","c":[["answer the question","回答问题"],["the answer to...","……的答案"],["answer the phone","接电话"]]},{"w":"any","p":"adj./pron.","m":"任何；一些","c":[["any more","再；还"],["any other","任何其他的"],["at any time","在任何时候"]]},{"w":"anyone/anybody","p":"pron.","m":"任何人","c":[["anyone else","其他任何人"]]},{"w":"anything","p":"pron.","m":"任何事物","c":[["anything else","其他任何事物"],["anything but","绝不；根本不"]]},{"w":"appear","p":"v.","m":"出现；显得","c":[["appear to be","似乎是"],["It appears that...","似乎……"]]},{"w":"area","p":"n.","m":"地区；面积","c":[["in the area","在这个地区"],["rural/urban area","农村/城市地区"]]},{"w":"arm","p":"n.","m":"手臂","c":[["arm in arm","臂挽臂地"],["take sb. by the arm","抓住某人的手臂"]]},{"w":"army","p":"n.","m":"军队","c":[["join the army","参军"]]},{"w":"around","p":"adv./prep.","m":"在周围；大约","c":[["look around","环顾四周"],["around the world","全世界"],["show sb. around","带某人参观"]]},{"w":"arrive","p":"v.","m":"到达","c":[["arrive at","到达（小地方）"],["arrive in","到达（大地方）"],["arrive late","迟到"]]},{"w":"art","p":"n.","m":"艺术；美术","c":[["work of art","艺术品"],["art class","美术课"],["art museum","美术馆"]]},{"w":"article","p":"n.","m":"文章；物品；冠词","c":[["write an article","写一篇文章"]]},{"w":"as","p":"conj./prep.","m":"作为；当……时；因为","c":[["as...as...","和……一样……"],["as usual","像往常一样"],["as if/though","好像"],["as long as","只要"],["as soon as","一……就……"],["as well","也；同样"]]},{"w":"ask","p":"v.","m":"问；请求","c":[["ask for","请求；要求"],["ask sb. to do sth.","要求某人做某事"],["ask sb. for help","向某人求助"]]},{"w":"asleep","p":"adj.","m":"睡着的","c":[["fall asleep","入睡"],["be asleep","睡着的"]]},{"w":"attention","p":"n.","m":"注意；关注","c":[["pay attention to","注意；关注"],["draw one's attention","引起某人的注意"]]},{"w":"avoid","p":"v.","m":"避免；回避","c":[["avoid doing sth.","避免做某事"]]},{"w":"awake","p":"adj./v.","m":"醒着的；醒来","c":[["stay awake","保持清醒"],["wake up","醒来"]]},{"w":"back","p":"adv./n./adj.","m":"向后；背部；后面的","c":[["come back","回来"],["give back","归还"],["call back","回电话"],["back and forth","来回地"]]},{"w":"bad","p":"adj.","m":"坏的；糟糕的","c":[["be bad at","不擅长"],["be bad for","对……有害"],["from bad to worse","越来越糟"]]},{"w":"ball","p":"n.","m":"球；舞会","c":[["play ball","打球"],["basketball","篮球"],["football/soccer","足球"]]},{"w":"base","p":"n./v.","m":"基础；以……为基础","c":[["be based on","以……为基础/依据"]]},{"w":"basic","p":"adj.","m":"基本的；基础的","c":[["basic knowledge","基础知识"],["basic skill","基本技能"]]},{"w":"bath","p":"n.","m":"洗澡","c":[["take/have a bath","洗澡"]]},{"w":"bear","p":"n./v.","m":"熊；忍受","c":[["can't bear","无法忍受"],["bear...in mind","记住……"]]},{"w":"beat","p":"v.","m":"打败；敲打；跳动","c":[["beat sb.","打败某人"],["one's heart beats","心跳"]]},{"w":"beautiful","p":"adj.","m":"美丽的；漂亮的","c":[["beautiful scenery","美丽的风景"]]},{"w":"because","p":"conj.","m":"因为","c":[["because of","因为（后接名词/代词）"]]},{"w":"become","p":"v.","m":"变成；成为","c":[["become a reality","成为现实"]]},{"w":"bed","p":"n.","m":"床","c":[["go to bed","上床睡觉"],["in bed","在床上（睡觉/休息）"],["make the bed","整理床铺"]]},{"w":"before","p":"prep./conj./adv.","m":"在……之前","c":[["before long","不久以后"],["long before","很久以前"],["the day before yesterday","前天"]]},{"w":"begin","p":"v.","m":"开始","c":[["begin with","以……开始"],["to begin with","首先；起初"],["begin to do/doing sth.","开始做某事"]]},{"w":"beginning","p":"n.","m":"开始；开端","c":[["at the beginning of","在……之初"],["from beginning to end","从头到尾"]]},{"w":"behind","p":"prep./adv.","m":"在……后面","c":[["fall behind","落后"],["leave behind","留下；遗忘"],["behind the door","在门后"]]},{"w":"believe","p":"v.","m":"相信；认为","c":[["believe in","信任；信仰"],["believe it or not","信不信由你"],["It is believed that...","人们相信……"]]},{"w":"belong","p":"v.","m":"属于","c":[["belong to","属于"]]},{"w":"below","p":"prep./adv.","m":"在……下方","c":[["below zero","零度以下"]]},{"w":"beside","p":"prep.","m":"在……旁边","c":[["beside the point","离题"]]},{"w":"besides","p":"prep./adv.","m":"除……之外（还有）","c":[["besides this","除此之外"]]},{"w":"best","p":"adj./adv.","m":"最好的","c":[["do one's best","尽力"],["best of all","最好的是"],["make the best use of","充分利用"]]},{"w":"better","p":"adj./adv.","m":"更好的","c":[["had better","最好（做某事）"],["get better","变好；好转"]]},{"w":"between","p":"prep.","m":"在（两者）之间","c":[["between...and...","在……和……之间"]]},{"w":"beyond","p":"prep.","m":"超出；在……那边","c":[["beyond one's ability","超出某人的能力"],["go beyond","超越"]]},{"w":"big","p":"adj.","m":"大的；重要的","c":[["big deal","重要的事；大买卖"],["have a big mouth","大嘴巴；爱说闲话"]]},{"w":"bill","p":"n.","m":"账单；法案","c":[["phone bill","电话账单"],["pay the bill","付账"]]},{"w":"birth","p":"n.","m":"出生","c":[["date of birth","出生日期"],["give birth to","生下；产生"]]},{"w":"bit","p":"n.","m":"一点；少量","c":[["a bit","稍微；有点儿"],["a bit of","一点"],["bit by bit","逐渐地"]]},{"w":"black","p":"adj./n.","m":"黑色的；黑色","c":[["black and white","黑白"],["black tea","红茶"],["blackboard","黑板"]]},{"w":"blind","p":"adj.","m":"失明的；盲目的","c":[["be blind to","对……视而不见"],["turn a blind eye to","对……视而不见"]]},{"w":"blood","p":"n.","m":"血；血液","c":[["blood type","血型"],["blood pressure","血压"]]},{"w":"blow","p":"v./n.","m":"吹；打击","c":[["blow out","吹灭"],["blow away","吹走"]]},{"w":"blue","p":"adj./n.","m":"蓝色的；蓝色；忧郁的","c":[["feel blue","情绪低落"],["blue sky","蓝天"]]},{"w":"board","p":"n./v.","m":"板；上船/车/飞机","c":[["on board","在船/车/飞机上"],["blackboard","黑板"],["notice board","公告栏"]]},{"w":"boat","p":"n.","m":"小船","c":[["by boat","乘小船"],["take a boat","乘船"]]},{"w":"body","p":"n.","m":"身体；主体","c":[["body language","肢体语言"],["keep fit and healthy body","保持身体健康"]]},{"w":"book","p":"n./v.","m":"书；预订","c":[["book a ticket","订票"],["bookstore","书店"]]},{"w":"boring","p":"adj.","m":"无聊的；乏味的","c":[["a boring film","无聊的电影"]]},{"w":"born","p":"v./adj.","m":"出生；天生的","c":[["be born","出生"],["be born with","天生具有"]]},{"w":"borrow","p":"v.","m":"借入","c":[["borrow...from...","从……借……"]]},{"w":"both","p":"adj./pron.","m":"两者都","c":[["both...and...","……和……都"],["both of","两者都"]]},{"w":"bottle","p":"n.","m":"瓶子","c":[["a bottle of","一瓶"],["water bottle","水瓶"]]},{"w":"bottom","p":"n./adj.","m":"底部；底部的","c":[["at the bottom of","在……底部"],["from top to bottom","从上到下"]]},{"w":"box","p":"n.","m":"盒子；箱子","c":[["a box of","一盒"],["mailbox","邮箱"]]},{"w":"brave","p":"adj.","m":"勇敢的","c":[["It is brave of sb. to do sth.","某人做某事很勇敢"]]},{"w":"bread","p":"n.","m":"面包","c":[["a piece of bread","一片面包"]]},{"w":"break","p":"v./n.","m":"打破；休息","c":[["break down","出故障；垮掉"],["break into","闯入"],["break out","爆发"],["break up","分手；解散"],["have/take a break","休息一下"],["break the law","违法"]]},{"w":"breakfast","p":"n.","m":"早餐","c":[["have breakfast","吃早餐"],["for breakfast","作为早餐"]]},{"w":"breath","p":"n.","m":"呼吸","c":[["take a deep breath","深呼吸"],["out of breath","上气不接下气"],["hold one's breath","屏住呼吸"]]},{"w":"bring","p":"v.","m":"带来","c":[["bring up","抚养；提出"],["bring back","带回；使想起"],["bring in","引进；带来"]]},{"w":"brother","p":"n.","m":"兄弟","c":[["elder brother","哥哥"],["younger brother","弟弟"]]},{"w":"brown","p":"adj./n.","m":"棕色的；棕色","c":[["brown hair","棕色头发"]]},{"w":"brush","p":"n./v.","m":"刷子；刷","c":[["brush one's teeth","刷牙"],["brush up","复习；提高"]]},{"w":"build","p":"v.","m":"建造；建设","c":[["build up","建立；增强"],["be built of","由……建成"]]},{"w":"building","p":"n.","m":"建筑物","c":[["office building","办公楼"]]},{"w":"burn","p":"v.","m":"燃烧；烧伤","c":[["burn down","烧毁"],["burn out","烧尽"]]},{"w":"bus","p":"n.","m":"公共汽车","c":[["by bus","乘公交车"],["take a bus","坐公交车"],["bus stop","公交车站"]]},{"w":"business","p":"n.","m":"生意；商业","c":[["on business","出差"],["do business","做生意"],["mind one's own business","别管闲事"]]},{"w":"busy","p":"adj.","m":"忙碌的","c":[["be busy with sth.","忙于某事"],["be busy doing sth.","忙于做某事"],["as busy as a bee","非常忙碌"]]},{"w":"but","p":"conj./prep.","m":"但是；除了","c":[["not...but...","不是……而是……"],["nothing but","只有；只不过"]]},{"w":"buy","p":"v.","m":"买","c":[["buy sb. sth. = buy sth. for sb.","给某人买某物"],["buy in","大量买入"]]},{"w":"by","p":"prep./adv.","m":"由；通过；在旁","c":[["by the way","顺便说一下"],["by chance/accident","偶然地"],["by oneself","独自地"],["by hand","手工"],["by air/bus/train","乘飞机/公交/火车"]]},{"w":"call","p":"v./n.","m":"打电话；称呼；电话","c":[["call sb.","给某人打电话"],["call back","回电话"],["call for","需要；呼吁"],["call on","拜访（某人）"],["call off","取消"],["make a call","打电话"]]},{"w":"calm","p":"adj./v.","m":"冷静的；使平静","c":[["calm down","冷静下来"],["stay/keep calm","保持冷静"]]},{"w":"camera","p":"n.","m":"照相机","c":[["digital camera","数码相机"],["take photos with a camera","用相机拍照"]]},{"w":"camp","p":"n./v.","m":"营地；露营","c":[["summer camp","夏令营"],["go camping","去露营"]]},{"w":"can","p":"aux./n.","m":"能；可以；罐","c":[["can't help doing sth.","忍不住做某事"],["can't wait to do sth.","迫不及待做某事"],["as...as one can","尽可能……"]]},{"w":"capital","p":"n.","m":"首都；资本；大写字母","c":[["capital city","首都"]]},{"w":"care","p":"n./v.","m":"照顾；关心","c":[["take care of","照顾；保管"],["care about","关心；在乎"],["care for","照顾；喜欢"],["with care","小心地"]]},{"w":"careful","p":"adj.","m":"仔细的；小心的","c":[["be careful with","小心处理……"],["be careful of/about","小心……"],["be careful to do sth.","小心做某事"]]},{"w":"careless","p":"adj.","m":"粗心的","c":[["be careless about","对……粗心"]]},{"w":"carry","p":"v.","m":"携带；搬运","c":[["carry on","继续"],["carry out","执行；实施"]]},{"w":"catch","p":"v.","m":"抓住；赶上；染上","c":[["catch up with","赶上"],["catch a cold","感冒"],["catch one's attention/eye","引起某人的注意"],["catch fire","着火"]]},{"w":"cause","p":"v./n.","m":"造成；原因","c":[["cause...to do sth.","导致……做某事"],["the cause of","……的原因"]]},{"w":"celebrate","p":"v.","m":"庆祝","c":[["celebrate one's birthday","庆祝生日"]]},{"w":"center/centre","p":"n.","m":"中心","c":[["in the center of","在……中心"],["shopping center","购物中心"]]},{"w":"certain","p":"adj.","m":"确定的；某些","c":[["be certain of/about","对……确定"],["for certain","确定地"],["to a certain degree","在一定程度上"]]},{"w":"certainly","p":"adv.","m":"当然；肯定地","c":[["Certainly!","当然可以！"]]},{"w":"chair","p":"n.","m":"椅子","c":[["take a chair","坐下"],["armchair","扶手椅"]]},{"w":"chance","p":"n.","m":"机会；可能性","c":[["have a chance to do sth.","有机会做某事"],["by chance","偶然"],["take a chance","冒险；碰运气"],["give sb. a chance","给某人一次机会"]]},{"w":"change","p":"v./n.","m":"改变；变化；零钱","c":[["change...into...","把……变成……"],["change one's mind","改变主意"],["great changes","巨大变化"]]},{"w":"cheap","p":"adj.","m":"便宜的","c":[["cheap and nice","物美价廉"]]},{"w":"check","p":"v./n.","m":"检查；核对","c":[["check in","登记入住"],["check out","结账离开；查看"],["check up","检查"]]},{"w":"cheer","p":"v./n.","m":"欢呼；加油","c":[["cheer up","振作起来；高兴起来"],["Cheers!","干杯！"]]},{"w":"chemistry","p":"n.","m":"化学","c":[["chemistry lab","化学实验室"]]},{"w":"child","p":"n.","m":"孩子（复: children）","c":[["only child","独生子女"]]},{"w":"China","p":"n.","m":"中国","c":[["in China","在中国"],["Chinese","中国人；汉语"]]},{"w":"choice","p":"n.","m":"选择","c":[["make a choice","做选择"],["have no choice but to do sth.","除了做某事别无选择"]]},{"w":"choose","p":"v.","m":"选择","c":[["choose to do sth.","选择做某事"],["choose...from...","从……中选择……"]]},{"w":"circle","p":"n./v.","m":"圆；环绕","c":[["in a circle","围成一圈"]]},{"w":"city","p":"n.","m":"城市","c":[["city center","市中心"],["big city","大城市"]]},{"w":"class","p":"n.","m":"班级；课","c":[["in class","在课堂上"],["after class","课后"],["have a class","上课"]]},{"w":"classmate","p":"n.","m":"同学","c":[["deskmate","同桌"]]},{"w":"classroom","p":"n.","m":"教室","c":[["in the classroom","在教室里"]]},{"w":"clean","p":"adj./v.","m":"干净的；打扫","c":[["clean up","清理干净"],["clean the room","打扫房间"],["keep...clean","保持……干净"]]},{"w":"clear","p":"adj./v.","m":"清楚的；清除","c":[["clear up","清理；放晴"],["make it clear that...","清楚地表明……"]]},{"w":"clever","p":"adj.","m":"聪明的","c":[["be clever at","擅长……"],["It is clever of sb. to do sth.","某人做某事真聪明"]]},{"w":"climb","p":"v.","m":"爬；攀登","c":[["climb the mountain","爬山"],["climb up","爬上"]]},{"w":"clock","p":"n.","m":"时钟","c":[["around the clock","昼夜不停地"],["alarm clock","闹钟"]]},{"w":"close","p":"adj./v.","m":"近的；关闭","c":[["close down","关闭；停业"],["close to","靠近；接近"],["be close to","离……近"]]},{"w":"clothes","p":"n.","m":"衣服","c":[["put on clothes","穿衣服"],["take off clothes","脱衣服"]]},{"w":"cloud","p":"n.","m":"云","c":[["dark cloud","乌云"],["cloudy","多云的"]]},{"w":"club","p":"n.","m":"俱乐部","c":[["join a club","加入俱乐部"],["sports club","体育俱乐部"]]},{"w":"cold","p":"adj./n.","m":"冷的；寒冷；感冒","c":[["catch/have a cold","感冒"],["cold weather","寒冷的天气"]]},{"w":"collect","p":"v.","m":"收集；采集","c":[["collect stamps","集邮"],["collect information","收集信息"]]},{"w":"college","p":"n.","m":"学院；大学","c":[["go to college","上大学"]]},{"w":"colour/color","p":"n./v.","m":"颜色；涂色","c":[["in colour","彩色的"],["what colour","什么颜色"]]},{"w":"come","p":"v.","m":"来","c":[["come from","来自"],["come back","回来"],["come up with","想出"],["come out","出版；出来"],["come true","实现"],["come across","偶然遇到"],["come on","加油；快点"],["come in","进来"]]},{"w":"comfortable","p":"adj.","m":"舒适的","c":[["feel comfortable","感到舒适"]]},{"w":"common","p":"adj.","m":"普通的；共同的","c":[["in common","共同；共有"],["common sense","常识"]]},{"w":"communicate","p":"v.","m":"交流；沟通","c":[["communicate with","与……交流"]]},{"w":"company","p":"n.","m":"公司；陪伴","c":[["keep sb. company","陪伴某人"]]},{"w":"compare","p":"v.","m":"比较","c":[["compare...with/to...","把……与……比较"],["compared with/to","与……相比"]]},{"w":"competition","p":"n.","m":"比赛；竞争","c":[["take part in a competition","参加比赛"]]},{"w":"complete","p":"v./adj.","m":"完成；完整的","c":[["complete one's homework","完成作业"]]},{"w":"computer","p":"n.","m":"电脑","c":[["play computer games","玩电脑游戏"],["on the computer","在电脑上"]]},{"w":"condition","p":"n.","m":"条件；状况","c":[["in good condition","状况良好"],["on condition that","在……条件下"]]},{"w":"connect","p":"v.","m":"连接；联系","c":[["connect...with/to...","把……与……连接起来"],["be connected with","与……有关联"]]},{"w":"consider","p":"v.","m":"考虑；认为","c":[["consider doing sth.","考虑做某事"],["be considered as","被视为"]]},{"w":"continue","p":"v.","m":"继续","c":[["continue to do/doing sth.","继续做某事"],["to be continued","待续"]]},{"w":"control","p":"v./n.","m":"控制","c":[["under control","在控制之下"],["out of control","失控"],["lose control of","失去对……的控制"]]},{"w":"conversation","p":"n.","m":"对话；交谈","c":[["have a conversation with","与……交谈"],["make conversation","闲聊"]]},{"w":"cook","p":"v./n.","m":"烹饪/厨师","c":[["cook a meal","做饭"],["do the cooking","做饭"]]},{"w":"cool","p":"adj.","m":"凉爽的；酷的","c":[["keep cool","保持凉爽/冷静"]]},{"w":"copy","p":"v./n.","m":"复制；抄写；副本","c":[["copy down","抄下"]]},{"w":"corner","p":"n.","m":"角落","c":[["at the corner of","在……角落"],["around the corner","在拐角处；即将到来"]]},{"w":"correct","p":"adj./v.","m":"正确的；纠正","c":[["correct the mistakes","改正错误"]]},{"w":"cost","p":"v./n.","m":"花费；成本","c":[["the cost of living","生活成本"],["at the cost of","以……为代价"],["cost sb. money","花费某人钱"]]},{"w":"could","p":"aux.","m":"可以；可能（can的过去式）","c":[["could you please...?","请你……好吗？"]]},{"w":"count","p":"v.","m":"数；计算","c":[["count down","倒计时"],["count on","依靠；指望"]]},{"w":"country","p":"n.","m":"国家；乡村","c":[["in the country","在乡下"],["foreign country","外国"]]},{"w":"courage","p":"n.","m":"勇气","c":[["have the courage to do sth.","有勇气做某事"]]},{"w":"course","p":"n.","m":"课程；过程","c":[["of course","当然"],["in the course of","在……过程中"]]},{"w":"cover","p":"v./n.","m":"覆盖；盖子；封面","c":[["be covered with","被……覆盖"],["cover up","掩盖"]]},{"w":"create","p":"v.","m":"创造","c":[["create a new world","创造一个新世界"]]},{"w":"cross","p":"v./n.","m":"穿过；十字","c":[["cross the road","过马路"],["cross out","划掉"]]},{"w":"cry","p":"v./n.","m":"哭；叫喊","c":[["cry out","大声喊叫"],["cry for help","呼救"]]},{"w":"culture","p":"n.","m":"文化","c":[["Chinese culture","中国文化"],["culture shock","文化冲击"]]},{"w":"cup","p":"n.","m":"杯子","c":[["a cup of","一杯"],["World Cup","世界杯"]]},{"w":"cut","p":"v.","m":"切；割；剪","c":[["cut down","砍倒；削减"],["cut off","切断"],["cut up","切碎"],["cut in","插嘴"]]},{"w":"daily","p":"adj./adv.","m":"每日的；日常的","c":[["daily life","日常生活"],["daily newspaper","日报"]]},{"w":"dance","p":"v./n.","m":"跳舞","c":[["dance to music","随着音乐跳舞"],["folk dance","民间舞蹈"]]},{"w":"danger","p":"n.","m":"危险","c":[["in danger","处于危险中"],["out of danger","脱离危险"],["in danger of","有……的危险"]]},{"w":"dangerous","p":"adj.","m":"危险的","c":[["be dangerous to","对……危险"]]},{"w":"dark","p":"adj./n.","m":"黑暗的；黑暗","c":[["in the dark","在黑暗中；不知情"],["dark blue","深蓝色"]]},{"w":"date","p":"n.","m":"日期；约会","c":[["date of birth","出生日期"],["out of date","过时的"],["up to date","最新的"]]},{"w":"daughter","p":"n.","m":"女儿","c":[["only daughter","独生女"]]},{"w":"day","p":"n.","m":"天；白天","c":[["day and night","日日夜夜"],["day after day","日复一日"],["one day","有一天"],["the day after tomorrow","后天"],["these days","如今"]]},{"w":"dead","p":"adj.","m":"死的","c":[["be dead","死了的"]]},{"w":"dear","p":"adj.","m":"亲爱的；昂贵的","c":[["Dear Sir/Madam","亲爱的先生/女士"]]},{"w":"death","p":"n.","m":"死亡","c":[["the death of","……的死亡"]]},{"w":"decide","p":"v.","m":"决定","c":[["decide to do sth.","决定做某事"],["decide on","就……做出决定"],["make a decision","做决定"]]},{"w":"decision","p":"n.","m":"决定","c":[["make a decision","做出决定"]]},{"w":"deep","p":"adj./adv.","m":"深的；深深地","c":[["deep in thought","陷入沉思"],["take a deep breath","深呼吸"]]},{"w":"degree","p":"n.","m":"程度；学位","c":[["to some degree","在某种程度上"]]},{"w":"delicious","p":"adj.","m":"美味的","c":[["taste delicious","尝起来美味"]]},{"w":"depend","p":"v.","m":"依靠；取决于","c":[["depend on","依靠；取决于"],["It depends.","看情况而定。"]]},{"w":"describe","p":"v.","m":"描述","c":[["describe...as...","把……描述为……"]]},{"w":"desk","p":"n.","m":"书桌","c":[["at the desk","在书桌前"]]},{"w":"develop","p":"v.","m":"发展；开发","c":[["develop a habit of","养成……的习惯"],["developing country","发展中国家"],["developed country","发达国家"]]},{"w":"development","p":"n.","m":"发展","c":[["with the development of","随着……的发展"]]},{"w":"dictionary","p":"n.","m":"字典","c":[["look up...in the dictionary","在字典中查阅……"]]},{"w":"die","p":"v.","m":"死；去世","c":[["die of","死于（内因）"],["die from","死于（外因）"],["die out","灭绝"]]},{"w":"difference","p":"n.","m":"差异；区别","c":[["make a difference","有影响；起（重要）作用"],["tell the difference","辨别差异"]]},{"w":"different","p":"adj.","m":"不同的","c":[["be different from","与……不同"],["different kinds of","不同种类的"]]},{"w":"difficult","p":"adj.","m":"困难的","c":[["It is difficult for sb. to do sth.","对某人来说做某事很难"]]},{"w":"difficulty","p":"n.","m":"困难","c":[["have difficulty (in) doing sth.","做某事有困难"],["in difficulty","处于困境中"]]},{"w":"dinner","p":"n.","m":"正餐；晚餐","c":[["have dinner","吃晚餐"],["for dinner","作为晚餐"]]},{"w":"direction","p":"n.","m":"方向；指导","c":[["in the direction of","朝……方向"],["under the direction of","在……指导下"]]},{"w":"dirty","p":"adj.","m":"脏的","c":[["make...dirty","弄脏……"]]},{"w":"discover","p":"v.","m":"发现","c":[["discover that...","发现……"]]},{"w":"discuss","p":"v.","m":"讨论","c":[["discuss...with sb.","与某人讨论……"]]},{"w":"discussion","p":"n.","m":"讨论","c":[["have a discussion about","就……进行讨论"]]},{"w":"dish","p":"n.","m":"盘子；菜肴","c":[["wash the dishes","洗碗"]]},{"w":"do","p":"v./aux.","m":"做","c":[["do one's best","尽力"],["do with","处理；对付"],["do without","没有……也行"],["do well in","在……方面做得好"],["have nothing to do with","与……无关"]]},{"w":"doctor","p":"n.","m":"医生","c":[["see a doctor","看医生"],["Doctor Li","李医生"]]},{"w":"dog","p":"n.","m":"狗","c":[["lucky dog","幸运儿"]]},{"w":"door","p":"n.","m":"门","c":[["from door to door","挨家挨户"],["answer the door","应门"],["next door","隔壁"]]},{"w":"double","p":"adj./n./v.","m":"双倍的；两倍；加倍","c":[["double room","双人房"]]},{"w":"doubt","p":"n./v.","m":"怀疑；疑问","c":[["without doubt","毫无疑问"],["no doubt","无疑"],["in doubt","不确定"]]},{"w":"down","p":"adv./prep.","m":"向下","c":[["sit down","坐下"],["write down","写下"],["cut down","砍倒；减少"],["break down","出故障"]]},{"w":"dream","p":"n./v.","m":"梦想；做梦","c":[["dream of/about","梦见；梦想"],["dream come true","梦想成真"]]},{"w":"dress","p":"n./v.","m":"连衣裙；穿衣","c":[["get dressed","穿好衣服"],["dress up","盛装打扮"]]},{"w":"drink","p":"v./n.","m":"喝；饮料","c":[["drink water","喝水"],["soft drink","软饮料"],["drink to","为……干杯"]]},{"w":"drive","p":"v.","m":"驾驶；驱使","c":[["drive sb. to","开车送某人去……"],["drive sb. crazy","使某人发疯"]]},{"w":"driver","p":"n.","m":"司机","c":[["driver's license","驾照"]]},{"w":"drop","p":"v./n.","m":"掉下；滴；下降","c":[["drop in","顺便拜访"],["drop out","辍学；退出"],["drop by","顺便拜访"]]},{"w":"dry","p":"adj./v.","m":"干的；弄干","c":[["dry up","干涸；枯竭"]]},{"w":"during","p":"prep.","m":"在……期间","c":[["during the day","在白天期间"]]},{"w":"duty","p":"n.","m":"责任；职责","c":[["on duty","值日；值班"],["off duty","下班"]]},{"w":"each","p":"adj./pron.","m":"每个；各自","c":[["each other","互相"],["each of","每一个"]]},{"w":"early","p":"adj./adv.","m":"早的；早","c":[["get up early","早起"],["as early as possible","尽早"]]},{"w":"earth","p":"n.","m":"地球；泥土","c":[["on earth","究竟；到底"],["on the earth","在地球上"]]},{"w":"east","p":"n./adj./adv.","m":"东方；东方的；向东","c":[["in the east of","在……东部（范围内）"],["to the east of","在……以东（范围外）"]]},{"w":"easy","p":"adj.","m":"容易的；轻松的","c":[["take it easy","别着急；放松"],["easy-going","随和的"]]},{"w":"eat","p":"v.","m":"吃","c":[["eat up","吃光"],["eat out","在外面吃"]]},{"w":"education","p":"n.","m":"教育","c":[["get/receive education","接受教育"],["higher education","高等教育"]]},{"w":"effort","p":"n.","m":"努力","c":[["make an effort to do sth.","努力做某事"],["spare no effort","不遗余力"]]},{"w":"either","p":"adj./adv./conj.","m":"（两者中的）任一个","c":[["either...or...","或者……或者……；要么……要么……"],["either of","（两者中）任一个"]]},{"w":"elder","p":"adj.","m":"年长的","c":[["elder brother/sister","哥哥/姐姐"]]},{"w":"else","p":"adv.","m":"其他的；另外","c":[["something else","其他东西"],["anyone else","其他任何人"],["or else","否则"]]},{"w":"empty","p":"adj./v.","m":"空的；倒空","c":[["empty into","流入；倒入"]]},{"w":"encourage","p":"v.","m":"鼓励","c":[["encourage sb. to do sth.","鼓励某人做某事"]]},{"w":"end","p":"n./v.","m":"结束；终点","c":[["at the end of","在……末尾/尽头"],["by the end of","到……结束时"],["in the end","最后；终于"],["come to an end","结束"]]},{"w":"enemy","p":"n.","m":"敌人","c":[["make enemies","树敌"]]},{"w":"energy","p":"n.","m":"精力；能量","c":[["full of energy","充满活力"],["save energy","节约能源"]]},{"w":"English","p":"n./adj.","m":"英语；英国的","c":[["in English","用英语"],["spoken English","英语口语"],["English-speaking","说英语的"]]},{"w":"enjoy","p":"v.","m":"享受；喜欢","c":[["enjoy doing sth.","喜欢做某事"],["enjoy oneself","玩得开心"]]},{"w":"enough","p":"adj./adv./n.","m":"足够的；足够地","c":[["enough to do sth.","足够做某事"],["old enough","足够大"],["more than enough","绰绰有余"]]},{"w":"enter","p":"v.","m":"进入","c":[["enter...into...","把……输入……"],["enter the room","进入房间"]]},{"w":"environment","p":"n.","m":"环境","c":[["protect the environment","保护环境"],["natural environment","自然环境"]]},{"w":"especially","p":"adv.","m":"尤其；特别","c":[["more especially","尤其是"]]},{"w":"even","p":"adv.","m":"甚至；更加","c":[["even if/though","即使"],["even better","更好"],["even so","即便如此"]]},{"w":"evening","p":"n.","m":"晚上；傍晚","c":[["in the evening","在晚上"],["this evening","今天晚上"]]},{"w":"ever","p":"adv.","m":"曾经；在任何时候","c":[["ever since","从那时起"],["for ever","永远"],["Have you ever...?","你曾经……吗？"]]},{"w":"every","p":"adj.","m":"每个的；每一的","c":[["every day","每天"],["every time","每次"],["every other day","每隔一天"]]},{"w":"everybody/everyone","p":"pron.","m":"每人；人人","c":[["everybody else","其他所有人"]]},{"w":"everything","p":"pron.","m":"一切；每件事","c":[["everything is ready","一切都准备好了"]]},{"w":"everywhere","p":"adv.","m":"到处","c":[["everywhere you go","你去任何地方"]]},{"w":"exact","p":"adj.","m":"精确的","c":[["to be exact","确切地说"]]},{"w":"exam","p":"n.","m":"考试","c":[["take/have an exam","参加考试"],["pass an exam","通过考试"],["fail an exam","考试不及格"]]},{"w":"example","p":"n.","m":"例子；榜样","c":[["for example","例如"],["set an example for","为……树立榜样"]]},{"w":"excellent","p":"adj.","m":"优秀的；极好的","c":[["be excellent at","在……方面优秀"]]},{"w":"except","p":"prep.","m":"除……之外（不包括）","c":[["except for","除……之外（整体中的瑕疵）"],["except that","除了……"]]},{"w":"excite","p":"v.","m":"使兴奋","c":[["be excited about","对……感到兴奋"],["excite one's interest","激发某人的兴趣"]]},{"w":"excited","p":"adj.","m":"兴奋的（修饰人）","c":[["be excited about/at","对……感到兴奋"]]},{"w":"exciting","p":"adj.","m":"令人兴奋的（修饰物）","c":[["an exciting game","一场激动人心的比赛"]]},{"w":"excuse","p":"n./v.","m":"借口；原谅","c":[["excuse me","对不起；打扰了"],["make an excuse","找借口"]]},{"w":"exercise","p":"n./v.","m":"锻炼；练习","c":[["take/do exercise","锻炼身体"],["do morning exercises","做早操"]]},{"w":"expect","p":"v.","m":"期待；期望","c":[["expect to do sth.","期望做某事"],["expect sb. to do sth.","期望某人做某事"],["as expected","正如所料"]]},{"w":"expensive","p":"adj.","m":"昂贵的","c":[["too expensive","太贵了"]]},{"w":"experience","p":"n./v.","m":"经验；经历","c":[["work experience","工作经验"],["learn from experience","从经验中学习"]]},{"w":"explain","p":"v.","m":"解释；说明","c":[["explain...to sb.","向某人解释……"],["explain oneself","说明自己的意思"]]},{"w":"express","p":"v.","m":"表达","c":[["express oneself","表达自己的想法"]]},{"w":"eye","p":"n.","m":"眼睛","c":[["keep an eye on","留意；照看"],["eye contact","眼神交流"],["catch one's eye","引起某人注意"]]},{"w":"face","p":"n./v.","m":"脸；面对","c":[["face to face","面对面"],["make a face","做鬼脸"],["be faced with","面临"],["face the difficulty","面对困难"]]},{"w":"fact","p":"n.","m":"事实","c":[["in fact","实际上"],["as a matter of fact","事实上"],["face the fact","面对事实"]]},{"w":"fail","p":"v.","m":"失败；不及格","c":[["fail to do sth.","未能做某事"],["fail (in) the exam","考试不及格"],["never fail to do","总是做……"]]},{"w":"fair","p":"adj./n.","m":"公平的；展览会","c":[["fair play","公平竞争"],["be fair to","对……公平"],["job fair","招聘会"]]},{"w":"fall","p":"v./n.","m":"掉落；秋天（美）","c":[["fall behind","落后"],["fall down","跌倒"],["fall in love with","爱上"],["fall asleep","入睡"],["fall off","从……掉下"]]},{"w":"family","p":"n.","m":"家庭","c":[["family name","姓氏"],["family member","家庭成员"],["family tree","家谱"]]},{"w":"famous","p":"adj.","m":"著名的","c":[["be famous for","因……而著名"],["be famous as","作为……而著名"],["world-famous","举世闻名的"]]},{"w":"far","p":"adj./adv.","m":"远的；远","c":[["far away","遥远的"],["far from","远离；远非"],["as far as","就……而言；远到"],["so far","到目前为止"]]},{"w":"fast","p":"adj./adv.","m":"快的；快地","c":[["fast food","快餐"],["as fast as possible","尽快"]]},{"w":"father","p":"n.","m":"父亲","c":[["Father's Day","父亲节"]]},{"w":"favourite/favorite","p":"adj./n.","m":"最喜欢的；最爱","c":[["one's favourite subject","某人最喜欢的科目"]]},{"w":"fear","p":"n./v.","m":"害怕；恐惧","c":[["in fear of","害怕……"],["for fear of","唯恐；以免"]]},{"w":"feel","p":"v.","m":"感觉；触摸","c":[["feel like doing sth.","想要做某事"],["feel at home","感到自在"],["feel free to do sth.","随意做某事"]]},{"w":"feeling","p":"n.","m":"感觉；感情","c":[["hurt one's feelings","伤害某人的感情"],["show one's feelings","表达感情"]]},{"w":"few","p":"adj./pron.","m":"很少的；几乎没有","c":[["a few","一些（接可数名词）"],["quite a few","相当多"],["few people","很少人"]]},{"w":"field","p":"n.","m":"田野；领域","c":[["in the field of","在……领域"],["sports field","运动场"]]},{"w":"fight","p":"v./n.","m":"打架；斗争","c":[["fight against","与……作斗争"],["fight for","为……而战"],["fight with","与……打架/并肩作战"]]},{"w":"fill","p":"v.","m":"填满；装满","c":[["fill...with...","用……填满……"],["be filled with","充满……"],["fill in","填写"]]},{"w":"final","p":"adj./n.","m":"最后的；决赛","c":[["final exam","期末考试"],["in the final","在决赛中"]]},{"w":"find","p":"v.","m":"找到；发现","c":[["find out","查明；发现"],["find one's way","找到路"],["find it + adj. + to do","发现做某事……"]]},{"w":"finish","p":"v.","m":"完成；结束","c":[["finish doing sth.","做完某事"],["finish with","用完；结束"]]},{"w":"fire","p":"n./v.","m":"火；解雇；开火","c":[["catch fire","着火"],["on fire","着火"],["put out the fire","灭火"],["fire station","消防站"]]},{"w":"first","p":"adj./adv./n.","m":"第一；首先","c":[["first of all","首先"],["at first","起初"],["for the first time","第一次"],["first aid","急救"]]},{"w":"fish","p":"n./v.","m":"鱼；钓鱼","c":[["go fishing","去钓鱼"],["a big fish in a small pond","小池塘里的大鱼"]]},{"w":"fit","p":"adj./v.","m":"适合的；合身","c":[["keep fit","保持健康"],["be fit for","适合……"],["fit in","适应；融入"]]},{"w":"fix","p":"v.","m":"修理；固定","c":[["fix up","修理；安排"],["fix one's eyes on","盯着……看"]]},{"w":"floor","p":"n.","m":"地板；楼层","c":[["on the floor","在地板上"],["the ground floor","一楼"]]},{"w":"flower","p":"n.","m":"花","c":[["in flower","开花"],["flower show","花展"]]},{"w":"fly","p":"v./n.","m":"飞；苍蝇","c":[["fly to","飞往"],["fly a kite","放风筝"],["Time flies.","时光飞逝。"]]},{"w":"follow","p":"v.","m":"跟随；遵守","c":[["follow the rules","遵守规则"],["as follows","如下"],["follow sb. to do sth.","跟随某人做某事"]]},{"w":"food","p":"n.","m":"食物","c":[["fast food","快餐"],["food safety","食品安全"]]},{"w":"foot","p":"n.","m":"脚；英尺（复: feet）","c":[["on foot","步行"],["at the foot of","在……脚下"]]},{"w":"for","p":"prep./conj.","m":"为了；因为；对……来说","c":[["for example","例如"],["for sure","肯定地"],["for a while","一会儿"],["be good for","对……有益"],["look for","寻找"],["ask for","请求"]]},{"w":"force","p":"n./v.","m":"力量；强迫","c":[["by force","用武力"],["force sb. to do sth.","强迫某人做某事"]]},{"w":"foreign","p":"adj.","m":"外国的","c":[["foreign language","外语"],["foreign country","外国"],["foreigner","外国人"]]},{"w":"forget","p":"v.","m":"忘记","c":[["forget to do sth.","忘记要做某事"],["forget doing sth.","忘记做过某事"],["forget about","忘记关于……的事"]]},{"w":"form","p":"n./v.","m":"形式；表格；形成","c":[["in the form of","以……的形式"],["form a habit","形成习惯"]]},{"w":"free","p":"adj./v.","m":"自由的；免费的；释放","c":[["for free","免费地"],["in one's free time","在某人的空闲时间"],["set...free","释放……"],["free of charge","免费"]]},{"w":"fresh","p":"adj.","m":"新鲜的","c":[["fresh air","新鲜空气"],["fresh water","淡水"],["freshman","新生"]]},{"w":"friend","p":"n.","m":"朋友","c":[["make friends with","与……交朋友"],["best friend","最好的朋友"],["a friend of mine","我的一个朋友"]]},{"w":"friendly","p":"adj.","m":"友好的","c":[["be friendly to","对……友好"],["environmentally friendly","环保的"]]},{"w":"from","p":"prep.","m":"来自；从","c":[["from...to...","从……到……"],["from now on","从现在起"],["from then on","从那时起"],["hear from","收到……的来信"],["come from","来自"]]},{"w":"front","p":"n./adj.","m":"前面；前面的","c":[["in front of","在……前面（外部）"],["in the front of","在……前部（内部）"],["at the front desk","在前台"]]},{"w":"full","p":"adj.","m":"满的；完全的","c":[["be full of","充满……"],["full name","全名"],["in full","完全地"]]},{"w":"fun","p":"n./adj.","m":"乐趣；有趣的","c":[["have fun","玩得开心"],["make fun of","取笑"],["for fun","为了好玩"],["have fun doing sth.","做某事很开心"]]},{"w":"future","p":"n./adj.","m":"未来；将来的","c":[["in the future","在未来"],["in future","今后"],["future plan","未来计划"]]},{"w":"game","p":"n.","m":"游戏；比赛","c":[["play games","玩游戏"],["Olympic Games","奥运会"],["video game","电子游戏"]]},{"w":"garden","p":"n.","m":"花园","c":[["in the garden","在花园里"],["botanical garden","植物园"]]},{"w":"general","p":"adj./n.","m":"一般的；将军","c":[["in general","一般来说"],["general idea","大概意思"]]},{"w":"get","p":"v.","m":"得到；变得；到达","c":[["get up","起床"],["get to","到达"],["get on/off","上车/下车"],["get along with","与……相处"],["get back","回来；取回"],["get over","克服；恢复"],["get together","聚会"],["get ready for","为……做好准备"],["get used to","习惯于"]]},{"w":"gift","p":"n.","m":"礼物；天赋","c":[["birthday gift","生日礼物"],["have a gift for","有……的天赋"]]},{"w":"girl","p":"n.","m":"女孩","c":[["girlfriend","女朋友"]]},{"w":"give","p":"v.","m":"给；给予","c":[["give up","放弃"],["give away","赠送；泄露"],["give out","分发；耗尽"],["give back","归还"],["give sb. a hand","帮助某人"]]},{"w":"glad","p":"adj.","m":"高兴的","c":[["be glad to do sth.","高兴做某事"],["be glad about","对……感到高兴"]]},{"w":"glass","p":"n.","m":"玻璃；玻璃杯（复: glasses 眼镜）","c":[["a glass of","一杯"],["a pair of glasses","一副眼镜"]]},{"w":"go","p":"v.","m":"去；走","c":[["go on","继续"],["go over","复习；检查"],["go through","经历；穿过"],["go by","（时间）流逝"],["go out","出去；熄灭"],["go for a walk","去散步"],["go shopping/swimming","去购物/游泳"],["go wrong","出问题"]]},{"w":"good","p":"adj.","m":"好的","c":[["be good at","擅长"],["be good for","对……有好处"],["be good to","对……友好"],["do good to","对……有好处"],["have a good time","玩得开心"]]},{"w":"government","p":"n.","m":"政府","c":[["local government","地方政府"]]},{"w":"great","p":"adj.","m":"伟大的；很棒的","c":[["a great deal of","大量（接不可数名词）"],["a great many","许多（接可数名词）"],["Great Wall","长城"]]},{"w":"green","p":"adj./n.","m":"绿色的；绿色；环保的","c":[["green tea","绿茶"],["go green","环保"]]},{"w":"ground","p":"n.","m":"地面","c":[["on the ground","在地上"],["playground","操场"],["underground","地铁"]]},{"w":"group","p":"n.","m":"组；群","c":[["a group of","一组；一群"],["in groups","分组地"],["group work","小组合作"]]},{"w":"grow","p":"v.","m":"生长；种植；变得","c":[["grow up","长大"],["grow into","长成"],["grow vegetables","种蔬菜"]]},{"w":"guess","p":"v./n.","m":"猜","c":[["guess what","你猜怎么着"],["make a guess","猜一猜"]]},{"w":"guest","p":"n.","m":"客人","c":[["be my guest","请便；别客气"]]},{"w":"guide","p":"n./v.","m":"导游；指导","c":[["a guide to","……的指南"],["guide sb. to","引导某人去……"]]},{"w":"habit","p":"n.","m":"习惯","c":[["form/develop a habit","养成习惯"],["be in the habit of","有……的习惯"],["break a bad habit","改掉坏习惯"]]},{"w":"half","p":"n./adj.","m":"一半；一半的","c":[["half an hour","半小时"],["cut...in half","把……切成两半"]]},{"w":"hand","p":"n./v.","m":"手；传递","c":[["hand in","上交"],["hand out","分发"],["hand over","移交"],["give sb. a hand","帮助某人"],["on the one hand...on the other hand","一方面……另一方面……"],["by hand","手工"]]},{"w":"happen","p":"v.","m":"发生；碰巧","c":[["happen to do sth.","碰巧做某事"],["happen to sb.","发生在某人身上"],["What happened?","发生什么事了？"]]},{"w":"happy","p":"adj.","m":"快乐的","c":[["be happy with","对……满意"],["be happy to do sth.","高兴做某事"],["Happy birthday!","生日快乐！"]]},{"w":"hard","p":"adj./adv.","m":"困难的；硬的；努力地","c":[["work hard","努力工作"],["hard work","艰苦的工作"],["be hard on","对……严厉"],["it is hard to do sth.","做某事很难"]]},{"w":"hardly","p":"adv.","m":"几乎不","c":[["hardly ever","几乎从不"],["hardly...when...","刚……就……"]]},{"w":"harm","p":"n./v.","m":"伤害；危害","c":[["do harm to","对……有害"],["There is no harm in doing sth.","做某事无害"]]},{"w":"hate","p":"v.","m":"讨厌；恨","c":[["hate to do/doing sth.","讨厌做某事"]]},{"w":"have","p":"v.","m":"有；吃；喝；让","c":[["have to","不得不"],["have a good time","玩得开心"],["have a look","看一看"],["have a rest","休息一下"],["have...done","让……被做"],["have sth. to do with","与……有关"]]},{"w":"he","p":"pron.","m":"他","c":[["he who...","……的人"]]},{"w":"head","p":"n./v.","m":"头；领导；前往","c":[["head for","前往"],["keep one's head","保持冷静"],["lose one's head","惊慌失措"],["head teacher","校长"]]},{"w":"health","p":"n.","m":"健康","c":[["in good health","身体健康"],["keep healthy","保持健康"],["health care","医疗保健"]]},{"w":"healthy","p":"adj.","m":"健康的","c":[["healthy food","健康食品"],["keep/stay healthy","保持健康"]]},{"w":"hear","p":"v.","m":"听见；听说","c":[["hear from","收到……的来信"],["hear of/about","听说"],["hear sb. do/doing","听见某人做/正在做"]]},{"w":"heart","p":"n.","m":"心脏；内心","c":[["learn...by heart","背诵……"],["heart and soul","全心全意"],["lose heart","灰心丧气"]]},{"w":"heavy","p":"adj.","m":"重的；大量的","c":[["heavy rain","大雨"],["heavy traffic","拥堵的交通"]]},{"w":"help","p":"v./n.","m":"帮助","c":[["help sb. (to) do sth.","帮助某人做某事"],["help sb. with sth.","在某事上帮助某人"],["can't help doing sth.","忍不住做某事"],["help oneself to","自取（食物等）"],["with the help of","在……的帮助下"]]},{"w":"here","p":"adv.","m":"这里","c":[["here and there","到处"],["Here you are.","给你。"]]},{"w":"high","p":"adj./adv.","m":"高的；高","c":[["high school","中学"],["high speed","高速"],["in high spirits","情绪高涨"]]},{"w":"history","p":"n.","m":"历史","c":[["Chinese history","中国历史"],["make history","创造历史"]]},{"w":"hit","p":"v./n.","m":"打击；击中；热门","c":[["hit sb. on the head","打某人的头"],["hit the road","出发；上路"]]},{"w":"hobby","p":"n.","m":"业余爱好","c":[["take up a hobby","开始一项爱好"]]},{"w":"hold","p":"v.","m":"拿着；举行；容纳","c":[["hold on","等一下；坚持"],["hold up","举起；耽搁"],["hold back","阻止；抑制"],["hold a meeting","举行会议"]]},{"w":"holiday","p":"n.","m":"假期","c":[["on holiday","在度假"],["summer holiday","暑假"],["take a holiday","休假"]]},{"w":"home","p":"n./adv.","m":"家；在家","c":[["at home","在家"],["go home","回家"],["stay at home","待在家里"],["homeland","祖国"]]},{"w":"homework","p":"n.","m":"家庭作业","c":[["do one's homework","做作业"],["hand in one's homework","交作业"]]},{"w":"honest","p":"adj.","m":"诚实的","c":[["to be honest","说实话"],["an honest boy","一个诚实的男孩"]]},{"w":"hope","p":"v./n.","m":"希望","c":[["hope to do sth.","希望做某事"],["in the hope of","怀着……的希望"],["hope for","希望；期待"]]},{"w":"hospital","p":"n.","m":"医院","c":[["in hospital","住院"],["go to hospital","去医院"]]},{"w":"hot","p":"adj.","m":"热的；辣的","c":[["hot dog","热狗"],["hot water","热水"]]},{"w":"hotel","p":"n.","m":"旅馆；酒店","c":[["stay at a hotel","住在酒店"],["check into a hotel","登记入住酒店"]]},{"w":"hour","p":"n.","m":"小时","c":[["an hour","一小时"],["rush hour","交通高峰期"]]},{"w":"house","p":"n.","m":"房子","c":[["at one's house","在某人家里"],["housework","家务"],["White House","白宫"]]},{"w":"how","p":"adv.","m":"怎样；多少；多么","c":[["how many","多少（可数）"],["how much","多少（不可数）；多少钱"],["how long","多长；多久"],["how far","多远"],["how often","多久一次"],["how about","……怎么样"]]},{"w":"however","p":"adv./conj.","m":"然而；无论如何","c":[["However hard it is, ...","无论多么困难，……"]]},{"w":"huge","p":"adj.","m":"巨大的","c":[["a huge success","巨大的成功"]]},{"w":"human","p":"n./adj.","m":"人类；人类的","c":[["human being","人类"],["human right","人权"]]},{"w":"hundred","p":"n.","m":"百","c":[["hundreds of","数以百计的"],["one hundred","一百"]]},{"w":"hungry","p":"adj.","m":"饥饿的","c":[["be hungry for","渴望……"],["go hungry","挨饿"]]},{"w":"hurry","p":"v./n.","m":"匆忙；赶快","c":[["hurry up","快点"],["in a hurry","匆忙地"],["hurry to do sth.","匆忙做某事"]]},{"w":"hurt","p":"v.","m":"伤害；疼","c":[["get hurt","受伤"],["hurt one's feelings","伤害某人的感情"]]},{"w":"idea","p":"n.","m":"想法；主意","c":[["have no idea","不知道"],["a good idea","一个好主意"],["change one's idea","改变想法"]]},{"w":"if","p":"conj.","m":"如果；是否","c":[["if necessary","如果有必要"],["if possible","如果可能"],["as if","好像"],["even if","即使"]]},{"w":"ill","p":"adj.","m":"生病的","c":[["fall ill","生病"],["be ill with","患……病"]]},{"w":"illness","p":"n.","m":"疾病","c":[["serious illness","重病"]]},{"w":"imagine","p":"v.","m":"想象","c":[["imagine doing sth.","想象做某事"],["imagine that...","想象……"]]},{"w":"important","p":"adj.","m":"重要的","c":[["It is important for sb. to do sth.","对某人来说做某事很重要"],["play an important role in","在……中起重要作用"]]},{"w":"impossible","p":"adj.","m":"不可能的","c":[["nothing is impossible","没有什么不可能"]]},{"w":"improve","p":"v.","m":"提高；改善","c":[["improve oneself","自我提高"],["improve on","改进"]]},{"w":"in","p":"prep./adv.","m":"在……里面；在家","c":[["in fact","事实上"],["in time","及时"],["in trouble","处于困境"],["in danger","在危险中"],["in public","公开地；当众"],["in order to","为了"],["be interested in","对……感兴趣"]]},{"w":"include","p":"v.","m":"包括","c":[["including sth./sb.","包括某物/某人"]]},{"w":"increase","p":"v./n.","m":"增加","c":[["increase by","增加了（幅度）"],["increase to","增加到"]]},{"w":"information","p":"n.","m":"信息（不可数）","c":[["a piece of information","一条信息"],["search for information","搜索信息"]]},{"w":"instead","p":"adv.","m":"代替；反而","c":[["instead of","代替；而不是"]]},{"w":"interest","p":"n./v.","m":"兴趣；使感兴趣","c":[["have/take an interest in","对……感兴趣"],["place of interest","名胜古迹"],["lose interest in","对……失去兴趣"]]},{"w":"interested","p":"adj.","m":"感兴趣的","c":[["be interested in","对……感兴趣"]]},{"w":"interesting","p":"adj.","m":"有趣的","c":[["an interesting story","一个有趣的故事"]]},{"w":"Internet","p":"n.","m":"互联网","c":[["on the Internet","在网上"],["surf the Internet","上网"]]},{"w":"interview","p":"n./v.","m":"采访；面试","c":[["job interview","工作面试"],["have an interview with","与……面试/访谈"]]},{"w":"into","p":"prep.","m":"进入；变成","c":[["look into","调查"],["get into","进入；陷入"],["change...into...","把……变成……"],["run into","偶然遇到"]]},{"w":"introduce","p":"v.","m":"介绍","c":[["introduce...to...","把……介绍给……"],["introduce oneself","自我介绍"]]},{"w":"invite","p":"v.","m":"邀请","c":[["invite sb. to do sth.","邀请某人做某事"],["invite sb. to some place","邀请某人去某地"]]},{"w":"island","p":"n.","m":"岛","c":[["on the island","在岛上"]]},{"w":"job","p":"n.","m":"工作","c":[["get a job","找到工作"],["lose one's job","失业"],["part-time job","兼职工作"],["do a good job","做得好"]]},{"w":"join","p":"v.","m":"加入；连接","c":[["join in","参加（活动）"],["join the army","参军"],["join the club","加入俱乐部"],["join...together","把……连接起来"]]},{"w":"joke","p":"n./v.","m":"笑话；开玩笑","c":[["play a joke on sb.","开某人的玩笑"],["tell a joke","讲笑话"],["joke about","拿……开玩笑"]]},{"w":"journey","p":"n.","m":"旅行；行程","c":[["go on a journey","去旅行"],["have a safe journey","旅途平安"]]},{"w":"joy","p":"n.","m":"快乐；喜悦","c":[["to one's joy","令某人高兴的是"],["with joy","高兴地"],["tears of joy","喜悦的泪水"]]},{"w":"just","p":"adv./adj.","m":"刚刚；正好；公正的","c":[["just now","刚才"],["just then","就在那时"],["just a moment","稍等一下"],["just as","正像；正当……时"]]},{"w":"keep","p":"v.","m":"保持；保留；继续","c":[["keep on doing sth.","持续做某事"],["keep...from doing","阻止……做"],["keep up with","跟上；保持联系"],["keep in touch with","与……保持联系"],["keep a diary","记日记"],["keep fit","保持健康"],["keep one's word","遵守诺言"]]},{"w":"key","p":"n./adj.","m":"钥匙；关键；键","c":[["the key to","……的钥匙/关键"],["key point","要点"],["keyboard","键盘"]]},{"w":"kill","p":"v.","m":"杀死；消磨（时间）","c":[["kill time","消磨时间"],["be killed in","在……中丧生"]]},{"w":"kind","p":"n./adj.","m":"种类；善良的","c":[["all kinds of","各种各样的"],["a kind of","一种"],["be kind to","对……友善"],["kind of","有点（口语）"]]},{"w":"king","p":"n.","m":"国王","c":[["the King","国王（特指）"]]},{"w":"kiss","p":"v./n.","m":"吻","c":[["kiss sb. goodbye","吻别某人"]]},{"w":"knock","p":"v./n.","m":"敲；敲击","c":[["knock at/on the door","敲门"],["knock over","撞倒"],["knock down","撞倒；拆除"]]},{"w":"know","p":"v.","m":"知道；认识","c":[["know about","了解关于……"],["be known as","作为……而闻名"],["be known for","因……而闻名"],["as we all know","众所周知"],["you know","你知道（口语）"]]},{"w":"knowledge","p":"n.","m":"知识（不可数）","c":[["a good knowledge of","对……的很好了解"],["general knowledge","常识"]]},{"w":"land","p":"n./v.","m":"土地；着陆","c":[["on land","在陆地上"],["land on","降落在"]]},{"w":"language","p":"n.","m":"语言","c":[["body language","肢体语言"],["foreign language","外语"],["mother language","母语"]]},{"w":"large","p":"adj.","m":"大的；大量的","c":[["a large number of","大量的（可数）"],["a large amount of","大量的（不可数）"],["at large","在逃的；整个"]]},{"w":"last","p":"adj./adv./v.","m":"最后的；上次；持续","c":[["last year/week","去年/上周"],["at last","最后；终于"],["last for","持续（多长时间）"],["to the last","直到最后"]]},{"w":"late","p":"adj./adv.","m":"晚的；迟的","c":[["be late for","……迟到"],["stay up late","熬夜"],["sooner or later","迟早"]]},{"w":"laugh","p":"v./n.","m":"笑","c":[["laugh at","嘲笑"],["burst into laughter","突然大笑"],["make sb. laugh","使某人发笑"]]},{"w":"law","p":"n.","m":"法律","c":[["break the law","违法"],["obey the law","守法"],["by law","依法"]]},{"w":"lay","p":"v.","m":"放置；产卵","c":[["lay out","布置；安排"],["lay down","放下；制定"]]},{"w":"lazy","p":"adj.","m":"懒惰的","c":[["a lazy afternoon","一个懒散的下午"]]},{"w":"lead","p":"v./n.","m":"领导；导致；铅","c":[["lead to","导致；通向"],["lead a...life","过……的生活"],["lead the way","带路"]]},{"w":"leader","p":"n.","m":"领导；领袖","c":[["team leader","团队领导"]]},{"w":"learn","p":"v.","m":"学习","c":[["learn from","向……学习"],["learn to do sth.","学做某事"],["learn about","了解"],["learn...by heart","背诵……"]]},{"w":"least","p":"adj./adv./n.","m":"最少的；最少","c":[["at least","至少"],["not in the least","一点也不"]]},{"w":"leave","p":"v.","m":"离开；留下","c":[["leave for","出发去（某地）"],["leave behind","留下；忘记带"],["leave out","省略；遗漏"],["leave a message","留言"],["leave alone","不打扰"]]},{"w":"left","p":"adj./adv./n.","m":"左边的；向左","c":[["on the left","在左边"],["turn left","左转"],["left over","剩下"]]},{"w":"lend","p":"v.","m":"借出","c":[["lend sth. to sb.","把某物借给某人"],["lend sb. a hand","帮助某人"]]},{"w":"less","p":"adj./adv.","m":"较少的；较少","c":[["less than","少于"],["more or less","或多或少"],["less and less","越来越少"]]},{"w":"lesson","p":"n.","m":"课；教训","c":[["have a lesson","上课"],["teach sb. a lesson","给某人一个教训"],["learn a lesson","吸取教训"]]},{"w":"let","p":"v.","m":"让","c":[["let sb. do sth.","让某人做某事"],["let...down","使……失望"],["let...in","让……进来"],["let out","放出；泄露"]]},{"w":"letter","p":"n.","m":"信；字母","c":[["write a letter to","给……写信"],["capital letter","大写字母"]]},{"w":"library","p":"n.","m":"图书馆","c":[["in the library","在图书馆"],["library card","借书卡"]]},{"w":"lie","p":"v./n.","m":"躺；位于；说谎","c":[["lie down","躺下"],["lie in","在于"],["tell a lie","说谎"]]},{"w":"life","p":"n.","m":"生活；生命","c":[["all one's life","一生"],["in life","在生活中"],["come to life","苏醒过来；活跃起来"],["way of life","生活方式"]]},{"w":"lift","p":"v./n.","m":"举起；电梯","c":[["give sb. a lift","让某人搭便车"],["lift up","举起"]]},{"w":"light","p":"n./adj./v.","m":"光；轻的；点亮","c":[["traffic light","交通灯"],["light up","照亮；容光焕发"],["light bulb","电灯泡"]]},{"w":"like","p":"v./prep.","m":"喜欢；像","c":[["would like to do","想要做"],["feel like doing","想要做"],["look like","看起来像"],["like doing/to do","喜欢做"]]},{"w":"line","p":"n./v.","m":"线；排队","c":[["wait in line","排队等候"],["line up","排队"],["on line","在线"]]},{"w":"list","p":"n./v.","m":"清单；列出","c":[["make a list of","列出……的清单"],["shopping list","购物清单"]]},{"w":"listen","p":"v.","m":"听","c":[["listen to","听……"],["listen to music","听音乐"],["listen up","注意听"]]},{"w":"little","p":"adj./adv./pron.","m":"小的；少的；几乎没有","c":[["a little","一点（不可数）"],["little by little","逐渐地"],["not a little","非常"]]},{"w":"live","p":"v./adj.","m":"生活；居住；直播的","c":[["live on","以……为生；靠……生活"],["live a...life","过……的生活"],["live with","忍受；与……住在一起"]]},{"w":"lively","p":"adj.","m":"活泼的；生动的","c":[["a lively child","一个活泼的孩子"]]},{"w":"lonely","p":"adj.","m":"孤独的；偏僻的","c":[["feel lonely","感到孤独"]]},{"w":"long","p":"adj./adv./v.","m":"长的；长久地；渴望","c":[["no longer","不再"],["as long as","只要"],["before long","不久以后"],["long before","很久以前"],["long to do sth.","渴望做某事"]]},{"w":"look","p":"v./n.","m":"看；看起来","c":[["look at","看……"],["look for","寻找"],["look after","照顾"],["look up","查阅；向上看"],["look forward to","期待"],["look through","浏览"],["look out","当心；向外看"],["look like","看起来像"]]},{"w":"lose","p":"v.","m":"丢失；输掉","c":[["lose one's way","迷路"],["lose weight","减肥"],["lose heart","灰心"],["lose one's temper","发脾气"],["be lost in","沉迷于……"]]},{"w":"lot","p":"n./pron.","m":"许多","c":[["a lot of = lots of","许多"],["a lot","很；非常"],["parking lot","停车场"]]},{"w":"love","p":"v./n.","m":"爱；热爱","c":[["fall in love with","爱上"],["would love to do","很想做"],["love story","爱情故事"]]},{"w":"lovely","p":"adj.","m":"可爱的；美好的","c":[["a lovely day","美好的一天"]]},{"w":"low","p":"adj./adv.","m":"低的；低","c":[["low price","低价"],["in a low voice","低声地"]]},{"w":"luck","p":"n.","m":"运气","c":[["good luck","好运"],["bad luck","倒霉"],["try one's luck","碰运气"]]},{"w":"lucky","p":"adj.","m":"幸运的","c":[["lucky dog","幸运儿"],["be lucky to do sth.","幸运地做某事"]]},{"w":"lunch","p":"n.","m":"午餐","c":[["have lunch","吃午餐"],["for lunch","作为午餐"]]},{"w":"machine","p":"n.","m":"机器","c":[["washing machine","洗衣机"],["vending machine","自动售货机"]]},{"w":"mad","p":"adj.","m":"发疯的；生气的","c":[["be mad at","对……生气"],["drive sb. mad","使某人发疯"],["be mad about","对……着迷"]]},{"w":"magazine","p":"n.","m":"杂志","c":[["fashion magazine","时尚杂志"]]},{"w":"mail","p":"n./v.","m":"邮件；邮寄","c":[["by mail","通过邮寄"],["email","电子邮件"]]},{"w":"main","p":"adj.","m":"主要的","c":[["main idea","主旨；中心思想"],["main course","主菜"]]},{"w":"make","p":"v.","m":"做；制造；使","c":[["make up","组成；编造；化妆"],["make sure","确保"],["make a mistake","犯错误"],["make friends with","与……交朋友"],["make a decision","做决定"],["make progress","取得进步"],["make use of","利用"],["make sense","有道理"],["make a difference","有影响"]]},{"w":"man","p":"n.","m":"男人；人类","c":[["young man","年轻人"],["man-made","人造的"]]},{"w":"manage","p":"v.","m":"管理；设法做到","c":[["manage to do sth.","设法做成某事"],["manage a company","管理公司"]]},{"w":"many","p":"adj./pron.","m":"许多的（接可数）","c":[["as many as","多达"],["a great many","许多"],["too many","太多"]]},{"w":"mark","p":"n./v.","m":"标记；分数","c":[["get good marks","取得好成绩"],["question mark","问号"],["mark down","记下"]]},{"w":"market","p":"n.","m":"市场","c":[["supermarket","超市"],["at the market","在市场上"]]},{"w":"marry","p":"v.","m":"结婚","c":[["marry sb.","与某人结婚"],["get married to","与……结婚"]]},{"w":"master","p":"n./v.","m":"主人；大师；掌握","c":[["master a language","掌握一门语言"]]},{"w":"match","p":"n./v.","m":"比赛；火柴；匹配","c":[["football match","足球比赛"],["match...with...","把……与……匹配"]]},{"w":"matter","p":"n./v.","m":"事情；要紧","c":[["no matter","无论"],["as a matter of fact","事实上"],["What's the matter?","怎么了？"],["It doesn't matter.","没关系。"]]},{"w":"may","p":"aux.","m":"可能；可以","c":[["may be","也许是（动词）"],["May I...?","我可以……吗？"]]},{"w":"maybe","p":"adv.","m":"也许；可能","c":[["Maybe you're right.","也许你是对的。"]]},{"w":"meal","p":"n.","m":"一餐","c":[["have a meal","吃饭"],["cook a meal","做饭"]]},{"w":"mean","p":"v./adj.","m":"意思是；吝啬的","c":[["mean to do sth.","打算做某事"],["mean doing sth.","意味着做某事"],["What do you mean?","你什么意思？"]]},{"w":"meaning","p":"n.","m":"意思；含义","c":[["the meaning of","……的意思"]]},{"w":"meat","p":"n.","m":"肉","c":[["a piece of meat","一块肉"]]},{"w":"medicine","p":"n.","m":"药；医学","c":[["take medicine","吃药"],["Chinese medicine","中医"]]},{"w":"meet","p":"v.","m":"遇见；会面","c":[["meet with","遭遇；会见"],["meet one's needs","满足某人的需求"],["Nice to meet you.","很高兴见到你。"]]},{"w":"meeting","p":"n.","m":"会议","c":[["have a meeting","开会"],["at the meeting","在会议上"]]},{"w":"member","p":"n.","m":"成员","c":[["family member","家庭成员"],["team member","队员"]]},{"w":"memory","p":"n.","m":"记忆；记忆力","c":[["in memory of","为了纪念"],["have a good memory","记忆力好"]]},{"w":"mention","p":"v./n.","m":"提到；提及","c":[["don't mention it","不客气"],["as mentioned above","如上所述"]]},{"w":"message","p":"n.","m":"消息；信息","c":[["take a message","捎口信"],["leave a message","留言"],["send a message","发送信息"]]},{"w":"method","p":"n.","m":"方法","c":[["teaching method","教学方法"]]},{"w":"middle","p":"n./adj.","m":"中间；中间的","c":[["in the middle of","在……中间"],["middle school","中学"]]},{"w":"might","p":"aux.","m":"可能（may的过去式）","c":[["might as well","不妨；还不如"]]},{"w":"mind","p":"n./v.","m":"头脑；介意","c":[["never mind","没关系；别介意"],["keep...in mind","记住……"],["change one's mind","改变主意"],["make up one's mind","下决心"],["mind doing sth.","介意做某事"],["mind you","请注意"]]},{"w":"minute","p":"n.","m":"分钟","c":[["in a minute","马上；立刻"],["just a minute","等一下"],["at the last minute","在最后一刻"]]},{"w":"miss","p":"v.","m":"想念；错过；未击中","c":[["miss the bus","错过公交车"],["miss doing sth.","怀念做某事"],["miss out","遗漏；错过机会"]]},{"w":"mistake","p":"n./v.","m":"错误；弄错","c":[["make a mistake","犯错误"],["by mistake","错误地；无意地"],["mistake...for...","把……误认为……"]]},{"w":"mix","p":"v.","m":"混合","c":[["mix...with...","把……与……混合"],["mix up","混淆"]]},{"w":"model","p":"n.","m":"模型；模特；模范","c":[["role model","榜样；模范"]]},{"w":"modern","p":"adj.","m":"现代的","c":[["modern times","现代"],["modern technology","现代科技"]]},{"w":"moment","p":"n.","m":"时刻；瞬间","c":[["at the moment","此刻；目前"],["for a moment","一会儿"],["the moment...","一……就……"],["in a moment","立刻"]]},{"w":"money","p":"n.","m":"钱","c":[["make/earn money","赚钱"],["pocket money","零花钱"],["save money","省钱；存钱"]]},{"w":"month","p":"n.","m":"月","c":[["this month","这个月"],["month by month","逐月"]]},{"w":"more","p":"adj./adv./pron.","m":"更多的；更多","c":[["more than","超过；多于"],["no more","不再"],["once more","再一次"],["the more..., the more...","越……，越……"],["more or less","或多或少"]]},{"w":"morning","p":"n.","m":"早晨","c":[["in the morning","在早上"],["every morning","每天早上"]]},{"w":"most","p":"adj./adv./pron.","m":"最多的；大多数","c":[["most of","大多数"],["at most","最多"],["make the most of","充分利用"]]},{"w":"mother","p":"n.","m":"母亲","c":[["Mother's Day","母亲节"]]},{"w":"mountain","p":"n.","m":"山","c":[["climb the mountain","爬山"],["at the foot of the mountain","在山脚下"]]},{"w":"mouth","p":"n.","m":"嘴","c":[["from mouth to mouth","口口相传"],["keep one's mouth shut","保持沉默"]]},{"w":"move","p":"v.","m":"移动；搬家；感动","c":[["move to","搬到"],["move on","继续前进"],["be deeply moved","被深深感动"]]},{"w":"movie","p":"n.","m":"电影","c":[["go to a movie","去看电影"],["movie star","电影明星"]]},{"w":"much","p":"adj./adv./pron.","m":"许多的（不可数）；非常","c":[["too much","太多"],["how much","多少；多少钱"],["as much as","多达"],["very much","非常"]]},{"w":"music","p":"n.","m":"音乐","c":[["listen to music","听音乐"],["music player","音乐播放器"],["pop music","流行音乐"]]},{"w":"must","p":"aux.","m":"必须；一定","c":[["must be","一定是"],["must have done","一定做过"]]},{"w":"name","p":"n./v.","m":"名字；命名","c":[["first name","名"],["family/last name","姓"],["be named after","以……命名"],["in the name of","以……的名义"]]},{"w":"narrow","p":"adj.","m":"狭窄的","c":[["narrow road","狭窄的路"],["in a narrow sense","在狭义上"]]},{"w":"nation","p":"n.","m":"国家；民族","c":[["the United Nations","联合国"]]},{"w":"natural","p":"adj.","m":"自然的","c":[["natural beauty","自然美"],["natural disaster","自然灾害"],["it is natural that...","……是很自然的"]]},{"w":"nature","p":"n.","m":"自然；天性","c":[["in nature","在自然界中"],["by nature","天生地"],["human nature","人性"]]},{"w":"near","p":"prep./adj./adv.","m":"在……附近；近的","c":[["near to","靠近"],["in the near future","在不久的将来"],["come near","走近"]]},{"w":"nearly","p":"adv.","m":"几乎；差不多","c":[["nearly every day","几乎每天"],["not nearly","远非；绝不是"]]},{"w":"necessary","p":"adj.","m":"必要的","c":[["if necessary","如果有必要"],["It is necessary to do sth.","有必要做某事"]]},{"w":"need","p":"v./n.","m":"需要","c":[["need to do sth.","需要做某事"],["need doing = need to be done","需要被做"],["in need of","需要"],["There is no need to do sth.","没必要做某事"]]},{"w":"neighbor/neighbour","p":"n.","m":"邻居","c":[["next-door neighbor","隔壁邻居"]]},{"w":"neither","p":"adj./pron./conj.","m":"两者都不","c":[["neither...nor...","既不……也不……"],["neither of","两者都不"]]},{"w":"nervous","p":"adj.","m":"紧张的","c":[["be nervous about","对……感到紧张"]]},{"w":"never","p":"adv.","m":"从不；绝不","c":[["never mind","没关系"],["never give up","永不放弃"],["better late than never","晚做总比不做好"]]},{"w":"new","p":"adj.","m":"新的","c":[["New Year","新年"],["newspaper","报纸"],["brand new","全新的"]]},{"w":"news","p":"n.","m":"新闻；消息（不可数）","c":[["a piece of news","一条新闻"],["on the news","在新闻中"],["good news","好消息"]]},{"w":"next","p":"adj./adv./n.","m":"下一个的；接下来","c":[["next to","紧挨着；几乎"],["next time","下次"],["next door","隔壁"]]},{"w":"nice","p":"adj.","m":"好的；友善的","c":[["Nice to meet you.","很高兴见到你。"],["have a nice day","祝你有美好的一天"]]},{"w":"night","p":"n.","m":"夜晚","c":[["at night","在晚上"],["day and night","夜以继日"],["last night","昨晚"]]},{"w":"no","p":"adj./adv.","m":"没有；不","c":[["no longer","不再"],["no matter","无论"],["no way","不可能；没门"],["no wonder","难怪"]]},{"w":"nobody","p":"pron.","m":"没有人","c":[["nobody else","没有其他人"]]},{"w":"nod","p":"v./n.","m":"点头","c":[["nod one's head","点头"]]},{"w":"noise","p":"n.","m":"噪音","c":[["make noise","制造噪音"],["traffic noise","交通噪音"]]},{"w":"noisy","p":"adj.","m":"吵闹的","c":[["a noisy classroom","吵闹的教室"]]},{"w":"none","p":"pron.","m":"一个也没有；毫无","c":[["none of","……中一个也没有"],["none at all","一个也没有"]]},{"w":"noon","p":"n.","m":"中午","c":[["at noon","在中午"]]},{"w":"normal","p":"adj.","m":"正常的","c":[["return to normal","恢复正常"],["as normal","和往常一样"]]},{"w":"north","p":"n./adj./adv.","m":"北方；北方的；向北","c":[["in the north of","在……的北部"]]},{"w":"nose","p":"n.","m":"鼻子","c":[["blow one's nose","擤鼻子"]]},{"w":"not","p":"adv.","m":"不；没有","c":[["not at all","一点也不"],["not only...but also...","不仅……而且……"],["not...any more","不再"]]},{"w":"note","p":"n./v.","m":"笔记；注意；钞票","c":[["take notes","记笔记"],["note down","记下"],["note of thanks","感谢信"]]},{"w":"nothing","p":"pron.","m":"没有什么","c":[["nothing but","只有；只不过"],["have nothing to do with","与……无关"],["for nothing","免费；徒劳"]]},{"w":"notice","p":"v./n.","m":"注意；通知","c":[["take notice of","注意到"],["notice board","公告栏"],["without notice","没有通知"]]},{"w":"now","p":"adv.","m":"现在","c":[["right now","立刻；马上"],["from now on","从现在起"],["by now","到现在"],["just now","刚才"]]},{"w":"number","p":"n.","m":"数字；号码","c":[["a (large) number of","大量的（接可数名词）"],["phone number","电话号码"],["the number of","……的数量"]]},{"w":"off","p":"adv./prep.","m":"离开；关掉","c":[["take off","脱下；起飞"],["turn off","关掉"],["put off","推迟"],["get off","下车"],["set off","出发"],["show off","炫耀"]]},{"w":"offer","p":"v./n.","m":"提供","c":[["offer to do sth.","主动提出做某事"],["offer sb. sth.","向某人提供某物"],["special offer","特价"]]},{"w":"office","p":"n.","m":"办公室","c":[["post office","邮局"],["office building","办公楼"]]},{"w":"often","p":"adv.","m":"经常","c":[["how often","多久一次"],["more often than not","多半"]]},{"w":"oil","p":"n.","m":"油","c":[["oil painting","油画"],["cooking oil","食用油"]]},{"w":"OK/okay","p":"adj./adv.","m":"好的；行","c":[["Are you OK?","你还好吗？"]]},{"w":"old","p":"adj.","m":"老的；旧的","c":[["how old","多大年纪"],["old friend","老朋友"],["in the old days","在过去"]]},{"w":"on","p":"prep./adv.","m":"在……上面；关于；开着","c":[["on time","准时"],["on foot","步行"],["on holiday","在度假"],["on business","出差"],["on the way","在路上"],["on the other hand","另一方面"],["from now on","从现在起"],["and so on","等等"]]},{"w":"once","p":"adv./conj.","m":"一次；一旦","c":[["at once","立刻"],["once again","再一次"],["once upon a time","从前"],["once in a while","偶尔"]]},{"w":"one","p":"num./pron.","m":"一；一个","c":[["one by one","一个接一个"],["one after another","一个接一个"],["one day","有一天"]]},{"w":"only","p":"adj./adv.","m":"唯一的；只","c":[["not only...but also...","不仅……而且……"],["only if","只有……才"],["if only","要是……就好了"],["only child","独生子女"]]},{"w":"open","p":"adj./v.","m":"开着的；打开","c":[["open up","打开；开放"],["in the open air","在户外"],["keep one's eyes open","保持警觉"]]},{"w":"opinion","p":"n.","m":"意见；看法","c":[["in one's opinion","在某人看来"],["give one's opinion","发表意见"]]},{"w":"opposite","p":"adj./n./prep.","m":"相反的；对面","c":[["opposite to","在……对面；与……相反"],["the opposite of","……的反面"]]},{"w":"or","p":"conj.","m":"或者；否则","c":[["either...or...","要么……要么……"],["whether...or not","是否"],["or else","否则"],["or so","大约"]]},{"w":"order","p":"n./v.","m":"顺序；命令；点餐","c":[["in order to","为了"],["in order that","以便"],["out of order","出故障"],["place an order","下单"]]},{"w":"other","p":"adj./pron.","m":"其他的","c":[["each other","互相"],["the other day","前几天"],["one...the other...","一个……另一个……"],["on the other hand","另一方面"]]},{"w":"out","p":"adv./prep.","m":"出去；在外面","c":[["go out","出去"],["find out","查明"],["look out","当心"],["run out of","用完"],["work out","解决；锻炼"],["out of date","过时的"],["out of control","失控"]]},{"w":"outside","p":"n./adj./adv./prep.","m":"外面","c":[["outside the door","在门外"]]},{"w":"over","p":"prep./adv.","m":"在……上方；结束；超过","c":[["over and over again","反复地"],["all over the world","全世界"],["go over","复习"],["over there","在那边"],["take over","接管"]]},{"w":"own","p":"adj./v.","m":"自己的；拥有","c":[["one's own","某人自己的"],["of one's own","属于某人自己的"],["on one's own","独自地"],["own up","承认"]]},{"w":"owner","p":"n.","m":"主人；所有者","c":[["the owner of","……的主人"]]},{"w":"pair","p":"n.","m":"双；对","c":[["a pair of","一双；一对"],["in pairs","成对地"]]},{"w":"paper","p":"n.","m":"纸；论文；报纸","c":[["a piece of paper","一张纸"],["paper cut","剪纸"]]},{"w":"pardon","p":"n./v.","m":"原谅；宽恕","c":[["Pardon me.","请原谅；对不起。"],["beg one's pardon","请求原谅"]]},{"w":"parent","p":"n.","m":"父/母亲（复: parents 父母）","c":[["single parent","单亲"]]},{"w":"park","p":"n./v.","m":"公园；停车","c":[["in the park","在公园"],["No parking.","禁止停车。"]]},{"w":"part","p":"n./v.","m":"部分；角色；分开","c":[["take part in","参加"],["play a part in","在……中起作用"],["part-time","兼职的"],["in part","部分地"]]},{"w":"party","p":"n.","m":"聚会；政党","c":[["birthday party","生日聚会"],["have a party","举办聚会"]]},{"w":"pass","p":"v.","m":"通过；传递；经过","c":[["pass by","经过"],["pass away","去世"],["pass down","传承"],["pass the exam","通过考试"],["pass on","传递"]]},{"w":"passage","p":"n.","m":"通道；段落","c":[["read the passage","阅读这段文章"]]},{"w":"passenger","p":"n.","m":"乘客","c":[["passenger seat","乘客座位"]]},{"w":"past","p":"n./adj./prep.","m":"过去；过去的；经过","c":[["in the past","在过去"],["go past","经过"],["half past two","两点半"]]},{"w":"pay","p":"v./n.","m":"支付；工资","c":[["pay for","为……付钱"],["pay attention to","注意"],["pay back","偿还；回报"],["pay off","还清；成功"]]},{"w":"peace","p":"n.","m":"和平；平静","c":[["in peace","和平地；安宁地"],["world peace","世界和平"]]},{"w":"pen","p":"n.","m":"笔","c":[["pen pal/friend","笔友"]]},{"w":"people","p":"n.","m":"人；人们","c":[["many people","许多人"],["the people","人民"]]},{"w":"perfect","p":"adj.","m":"完美的","c":[["perfect for","对……来说是完美的"],["practice makes perfect","熟能生巧"]]},{"w":"perhaps","p":"adv.","m":"也许；大概","c":[["Perhaps so.","也许吧。"]]},{"w":"period","p":"n.","m":"时期；句号","c":[["a period of time","一段时间"]]},{"w":"person","p":"n.","m":"人","c":[["in person","亲自"]]},{"w":"personal","p":"adj.","m":"个人的","c":[["personal information","个人信息"]]},{"w":"phone","p":"n./v.","m":"电话；打电话","c":[["make a phone call","打电话"],["answer the phone","接电话"],["mobile phone","手机"]]},{"w":"photo","p":"n.","m":"照片","c":[["take a photo of","给……拍照"],["photo album","相册"]]},{"w":"physics","p":"n.","m":"物理","c":[["physics teacher","物理老师"]]},{"w":"pick","p":"v.","m":"捡起；挑选","c":[["pick up","捡起；接（人）"],["pick out","挑选出"],["pick flowers","摘花"]]},{"w":"picture","p":"n.","m":"图片；照片","c":[["take a picture","拍照"],["in the picture","在照片中"]]},{"w":"piece","p":"n.","m":"块；片；件","c":[["a piece of","一块/片/条"],["in pieces","破碎"]]},{"w":"pity","p":"n.","m":"遗憾；可惜","c":[["What a pity!","真可惜！"],["feel pity for","同情……"]]},{"w":"place","p":"n./v.","m":"地方；放置","c":[["take place","发生；举行"],["in place of","代替"],["place of interest","名胜古迹"],["in the first place","首先"]]},{"w":"plan","p":"n./v.","m":"计划","c":[["plan to do sth.","计划做某事"],["make a plan","制定计划"],["according to plan","按计划"]]},{"w":"plane","p":"n.","m":"飞机","c":[["by plane","乘飞机"],["take a plane","坐飞机"]]},{"w":"planet","p":"n.","m":"行星","c":[["on the planet","在这个星球上"]]},{"w":"plant","p":"n./v.","m":"植物；种植","c":[["plant trees","种树"],["power plant","发电厂"]]},{"w":"play","p":"v./n.","m":"玩；播放；戏剧","c":[["play with","与……玩；玩弄"],["play a role in","在……中起作用"],["play sports","做运动"],["play the piano","弹钢琴"],["play a part","扮演角色"]]},{"w":"player","p":"n.","m":"运动员；选手；播放器","c":[["football player","足球运动员"]]},{"w":"please","p":"adv./v.","m":"请；使满意","c":[["please do sth.","请做某事"],["be pleased with","对……满意"],["pleased to meet you","很高兴见到你"]]},{"w":"pleasure","p":"n.","m":"愉快；高兴","c":[["with pleasure","乐意地"],["it's a pleasure","不客气"],["for pleasure","为了消遣"]]},{"w":"plenty","p":"n./pron.","m":"丰富；大量","c":[["plenty of","大量的"],["in plenty","充足"]]},{"w":"pocket","p":"n.","m":"口袋","c":[["pocket money","零花钱"],["in one's pocket","在口袋里"]]},{"w":"point","p":"n./v.","m":"点；要点；指出","c":[["point to","指向"],["point out","指出"],["to the point","切题"],["turning point","转折点"],["point of view","观点"]]},{"w":"police","p":"n.","m":"警察（集体名词）","c":[["call the police","报警"],["police station","警察局"]]},{"w":"polite","p":"adj.","m":"有礼貌的","c":[["be polite to","对……有礼貌"]]},{"w":"poor","p":"adj.","m":"贫穷的；可怜的；差的","c":[["the poor","穷人"],["be poor at","不擅长"]]},{"w":"popular","p":"adj.","m":"流行的；受欢迎的","c":[["be popular with","受……欢迎"],["popular music","流行音乐"]]},{"w":"population","p":"n.","m":"人口","c":[["have a large population","人口众多"],["the population of","……的人口"]]},{"w":"possible","p":"adj.","m":"可能的","c":[["as...as possible","尽可能……"],["if possible","如果可能"],["make it possible","使之成为可能"]]},{"w":"post","p":"n./v.","m":"邮件；邮寄；岗位","c":[["post office","邮局"],["post card","明信片"]]},{"w":"power","p":"n.","m":"力量；权力；电力","c":[["come into power","上台执政"],["power station","发电站"]]},{"w":"practice","p":"n./v.","m":"练习；实践","c":[["practice makes perfect","熟能生巧"],["practice doing sth.","练习做某事"],["put...into practice","把……付诸实践"]]},{"w":"praise","p":"v./n.","m":"赞扬；表扬","c":[["praise sb. for","因为……表扬某人"],["in praise of","赞扬"]]},{"w":"prefer","p":"v.","m":"更喜欢","c":[["prefer...to...","比起……更喜欢……"],["prefer to do/doing","更喜欢做"],["prefer to do rather than do","宁愿做……而不愿做"]]},{"w":"prepare","p":"v.","m":"准备","c":[["prepare for","为……做准备"],["prepare to do sth.","准备做某事"],["be prepared for","为……做好准备"]]},{"w":"present","p":"n./adj./v.","m":"礼物；现在的；呈现","c":[["at present","目前"],["for the present","暂时"],["give a present","送礼物"]]},{"w":"president","p":"n.","m":"总统；校长；主席","c":[["the President of the USA","美国总统"]]},{"w":"press","p":"v./n.","m":"按；压；新闻界","c":[["press the button","按按钮"]]},{"w":"pretend","p":"v.","m":"假装","c":[["pretend to do sth.","假装做某事"]]},{"w":"pretty","p":"adj./adv.","m":"漂亮的；相当","c":[["pretty good","相当好"]]},{"w":"prevent","p":"v.","m":"阻止；预防","c":[["prevent sb. from doing","阻止某人做某事"]]},{"w":"price","p":"n.","m":"价格","c":[["at a high/low price","以高/低价"],["the price of","……的价格"]]},{"w":"pride","p":"n.","m":"骄傲；自豪","c":[["take pride in","以……为骄傲"],["with pride","自豪地"]]},{"w":"primary","p":"adj.","m":"初级的；主要的","c":[["primary school","小学"]]},{"w":"problem","p":"n.","m":"问题；难题","c":[["no problem","没问题"],["solve the problem","解决问题"],["have problems with","在……方面有问题"]]},{"w":"produce","p":"v.","m":"生产；制造","c":[["produce...from...","用……生产……"]]},{"w":"product","p":"n.","m":"产品","c":[["new product","新产品"]]},{"w":"progress","p":"n./v.","m":"进步；进展","c":[["make progress","取得进步"],["in progress","在进行中"]]},{"w":"promise","p":"v./n.","m":"承诺","c":[["promise to do sth.","承诺做某事"],["keep one's promise","遵守诺言"],["break one's promise","违背诺言"]]},{"w":"pronounce","p":"v.","m":"发音","c":[["how to pronounce","如何发音"]]},{"w":"protect","p":"v.","m":"保护","c":[["protect...from/against...","保护……免受……"],["protect the environment","保护环境"]]},{"w":"proud","p":"adj.","m":"骄傲的；自豪的","c":[["be proud of","为……感到骄傲"],["be proud to do","做……感到自豪"]]},{"w":"prove","p":"v.","m":"证明","c":[["prove to be","证明是……"]]},{"w":"provide","p":"v.","m":"提供","c":[["provide sb. with sth.","给某人提供某物"],["provide sth. for sb.","为某人提供某物"]]},{"w":"public","p":"adj./n.","m":"公共的；公众","c":[["in public","当众；公开地"],["public transport","公共交通"]]},{"w":"pull","p":"v.","m":"拉","c":[["pull down","拆毁；拉下"],["pull out","拔出；离开"],["pull up","停车；拔起"]]},{"w":"punish","p":"v.","m":"惩罚","c":[["punish sb. for","因为……惩罚某人"]]},{"w":"purpose","p":"n.","m":"目的","c":[["on purpose","故意地"],["for the purpose of","为了……的目的"]]},{"w":"push","p":"v.","m":"推","c":[["push...into...","把……推进……"],["push one's way","挤过去"]]},{"w":"put","p":"v.","m":"放；放置","c":[["put on","穿上；上演"],["put off","推迟"],["put up","张贴；搭建；举起"],["put away","收起来"],["put down","放下；记下"],["put out","扑灭"],["put up with","忍受"]]},{"w":"quarter","p":"n.","m":"四分之一；一刻钟","c":[["a quarter past two","两点一刻"],["three quarters","四分之三"]]},{"w":"question","p":"n./v.","m":"问题；质疑","c":[["ask a question","问问题"],["answer the question","回答问题"],["out of the question","不可能"],["without question","毫无疑问"]]},{"w":"quick","p":"adj.","m":"快的","c":[["be quick","快点"],["quick response","快速反应"]]},{"w":"quiet","p":"adj.","m":"安静的","c":[["keep quiet","保持安静"],["a quiet place","安静的地方"]]},{"w":"quite","p":"adv.","m":"相当；完全","c":[["quite a few","相当多（可数）"],["quite a lot of","相当多"],["not quite","不完全"]]},{"w":"race","p":"n./v.","m":"比赛；种族","c":[["in the race","在比赛中"],["win the race","赢得比赛"]]},{"w":"rain","p":"n./v.","m":"雨；下雨","c":[["heavy rain","大雨"],["rain heavily","下大雨"],["rainy day","雨天"]]},{"w":"raise","p":"v.","m":"举起；提高；筹集","c":[["raise money","筹钱"],["raise one's hand","举手"],["raise a family","养家"]]},{"w":"rather","p":"adv.","m":"相当；宁愿","c":[["rather than","而不是"],["would rather do...than do","宁愿做……而不愿做"],["rather too","稍微……了一点"]]},{"w":"reach","p":"v.","m":"到达；够到","c":[["reach out","伸出手（帮助）"],["reach an agreement","达成协议"],["within reach","触手可及"]]},{"w":"read","p":"v.","m":"阅读；读","c":[["read aloud","大声朗读"],["read about","读到关于……"],["read through","通读"]]},{"w":"ready","p":"adj.","m":"准备好的","c":[["get ready for","为……做好准备"],["be ready to do","准备好做某事"],["ready-made","现成的"]]},{"w":"real","p":"adj.","m":"真实的","c":[["real life","现实生活"],["realize","意识到；实现"]]},{"w":"really","p":"adv.","m":"真正地；确实","c":[["not really","不见得；不完全是"],["really good","非常好"]]},{"w":"reason","p":"n.","m":"原因；理由","c":[["the reason for","……的原因"],["for some reason","由于某种原因"]]},{"w":"receive","p":"v.","m":"收到；接待","c":[["receive a letter from","收到……的来信"],["receive education","接受教育"]]},{"w":"recent","p":"adj.","m":"最近的","c":[["in recent years","近年来"]]},{"w":"record","p":"n./v.","m":"记录；录音","c":[["keep a record of","记录……"],["break the record","打破纪录"],["set a record","创纪录"]]},{"w":"red","p":"adj./n.","m":"红色的；红色","c":[["in red","穿红衣服"],["red wine","红酒"]]},{"w":"refuse","p":"v.","m":"拒绝","c":[["refuse to do sth.","拒绝做某事"]]},{"w":"regret","p":"v./n.","m":"后悔；遗憾","c":[["regret doing sth.","后悔做过某事"],["regret to do sth.","遗憾要做某事（通知坏消息）"]]},{"w":"relation","p":"n.","m":"关系","c":[["have relation to","与……有关"],["in relation to","关于"]]},{"w":"remember","p":"v.","m":"记住；记得","c":[["remember to do sth.","记得要做某事"],["remember doing sth.","记得做过某事"],["remember sb. to sb.","代某人向某人问好"]]},{"w":"remind","p":"v.","m":"提醒；使想起","c":[["remind sb. of sth.","使某人想起某事"],["remind sb. to do sth.","提醒某人做某事"]]},{"w":"repair","p":"v./n.","m":"修理","c":[["under repair","在修理中"],["repair the bike","修自行车"]]},{"w":"repeat","p":"v.","m":"重复","c":[["repeat after me","跟我读"]]},{"w":"reply","p":"v./n.","m":"回答；回复","c":[["reply to","回复……"],["make no reply","没有回答"]]},{"w":"report","p":"n./v.","m":"报告；报道","c":[["report to sb.","向某人报告"],["weather report","天气预报"],["school report","成绩单"]]},{"w":"require","p":"v.","m":"需要；要求","c":[["require doing","需要被做"],["require sb. to do","要求某人做"]]},{"w":"research","p":"n./v.","m":"研究","c":[["do research on","做关于……的研究"]]},{"w":"rest","p":"n./v.","m":"休息；剩余部分","c":[["take/have a rest","休息一下"],["the rest of","其余的……"]]},{"w":"restaurant","p":"n.","m":"餐厅","c":[["in a restaurant","在餐厅"]]},{"w":"result","p":"n.","m":"结果","c":[["as a result","因此；结果"],["as a result of","由于……"],["result in","导致"],["result from","由……引起"]]},{"w":"return","p":"v./n.","m":"返回；归还","c":[["return to","返回到"],["return...to...","把……归还给……"],["in return","作为回报"]]},{"w":"review","p":"v./n.","m":"复习；评论","c":[["review one's lessons","复习功课"]]},{"w":"rich","p":"adj.","m":"富有的；丰富的","c":[["be rich in","富含……"],["the rich","富人"]]},{"w":"ride","p":"v./n.","m":"骑；乘坐","c":[["ride a bike","骑自行车"],["give sb. a ride","让某人搭车"]]},{"w":"right","p":"adj./adv./n.","m":"正确的；右边的；权利","c":[["right now","立刻；马上"],["right away","立刻；马上"],["all right","好的"],["on the right","在右边"],["turn right","右转"]]},{"w":"ring","p":"v./n.","m":"响铃；戒指","c":[["ring up","给……打电话"],["give sb. a ring","给某人打电话"]]},{"w":"rise","p":"v./n.","m":"上升；起床","c":[["rise up","升起；起义"],["give rise to","引起；导致"]]},{"w":"risk","p":"n./v.","m":"风险；冒险","c":[["take a risk","冒险"],["run the risk of","冒……的风险"],["at risk","处于危险中"]]},{"w":"river","p":"n.","m":"河；江","c":[["in the river","在河里"],["the Yellow River","黄河"]]},{"w":"road","p":"n.","m":"路","c":[["on the road","在路上"],["cross the road","过马路"],["main road","主路"]]},{"w":"rock","p":"n.","m":"岩石","c":[["rock music","摇滚乐"],["as hard as a rock","坚如磐石"]]},{"w":"role","p":"n.","m":"角色；作用","c":[["play a role in","在……中起作用"],["role model","榜样；模范"]]},{"w":"room","p":"n.","m":"房间；空间","c":[["in the room","在房间里"],["make room for","为……腾出空间"],["living room","客厅"]]},{"w":"round","p":"adj./adv./prep./n.","m":"圆的；围绕；轮次","c":[["all year round","全年"],["look round","环顾"],["round the corner","在拐角处"]]},{"w":"rule","p":"n./v.","m":"规则；统治","c":[["follow the rules","遵守规则"],["break the rules","违反规则"],["as a rule","通常"]]},{"w":"run","p":"v.","m":"跑；经营","c":[["run out of","用完；耗尽"],["run into","偶然遇到"],["run after","追赶"],["run away","逃跑"],["run fast","跑得快"]]},{"w":"rush","p":"v./n.","m":"冲；匆忙","c":[["rush hour","交通高峰期"],["rush to do sth.","匆忙做某事"]]},{"w":"sad","p":"adj.","m":"悲伤的","c":[["feel sad","感到悲伤"],["sad story","悲伤的故事"]]},{"w":"safe","p":"adj./n.","m":"安全的；保险柜","c":[["keep/stay safe","保持安全"],["safe and sound","平安无事"]]},{"w":"safety","p":"n.","m":"安全","c":[["in safety","安全地"],["safety first","安全第一"]]},{"w":"same","p":"adj./pron.","m":"相同的","c":[["the same as","和……一样"],["at the same time","同时"],["all the same","仍然；都一样"]]},{"w":"save","p":"v.","m":"节省；拯救","c":[["save time/money","省时间/钱"],["save one's life","救某人的命"],["save up","储蓄"]]},{"w":"say","p":"v.","m":"说","c":[["say goodbye to","向……告别"],["say to oneself","自言自语"],["that is to say","也就是说"],["it is said that...","据说……"]]},{"w":"school","p":"n.","m":"学校","c":[["go to school","去上学"],["after school","放学后"],["at school","在学校"],["primary/middle/high school","小学/中学/高中"]]},{"w":"science","p":"n.","m":"科学","c":[["science and technology","科技"],["science lab","科学实验室"]]},{"w":"sea","p":"n.","m":"海","c":[["by the sea","在海边"],["at sea","在海上；茫然"]]},{"w":"search","p":"n./v.","m":"搜索；搜寻","c":[["search for","搜寻"],["in search of","寻找……"]]},{"w":"season","p":"n.","m":"季节","c":[["in season","当季的"],["the four seasons","四季"]]},{"w":"seat","p":"n./v.","m":"座位；使就座","c":[["take/have a seat","坐下"],["be seated","就座"]]},{"w":"second","p":"n./adj./adv.","m":"秒；第二；其次","c":[["second-hand","二手的"],["in the second place","其次"]]},{"w":"secret","p":"n./adj.","m":"秘密；秘密的","c":[["keep a secret","保守秘密"],["in secret","秘密地"]]},{"w":"see","p":"v.","m":"看见；理解","c":[["see a doctor","看医生"],["see sb. off","为某人送行"],["see to","处理；负责"],["let me see","让我想想"]]},{"w":"seem","p":"v.","m":"似乎；好像","c":[["seem to be","似乎是"],["It seems that...","似乎……"]]},{"w":"seldom","p":"adv.","m":"很少；不常","c":[["seldom do sth.","很少做某事"]]},{"w":"sell","p":"v.","m":"卖","c":[["sell out","卖完"],["sell well","畅销"],["for sale","待售"]]},{"w":"send","p":"v.","m":"发送；派遣","c":[["send up","发射"],["send for","派人去请"],["send out","发出；发送"],["send away","赶走"]]},{"w":"sense","p":"n./v.","m":"感觉；意义","c":[["make sense","有道理；讲得通"],["common sense","常识"],["in a sense","在某种意义上"]]},{"w":"sentence","p":"n.","m":"句子；判决","c":[["make a sentence","造句"]]},{"w":"separate","p":"v./adj.","m":"分开；单独的","c":[["separate...from...","把……与……分开"]]},{"w":"serious","p":"adj.","m":"严肃的；严重的","c":[["be serious about","对……认真"],["nothing serious","没什么严重的"]]},{"w":"serve","p":"v.","m":"服务；招待","c":[["serve as","充当；担任"],["serve the people","为人民服务"]]},{"w":"service","p":"n.","m":"服务","c":[["at your service","听候您的吩咐"]]},{"w":"set","p":"v./n.","m":"设定；一套；落下","c":[["set up","建立；设立"],["set off","出发；引爆"],["set out","出发；开始"],["set an example","树立榜样"],["set the table","摆桌子"]]},{"w":"several","p":"adj./pron.","m":"几个；数个","c":[["several times","几次"]]},{"w":"shake","p":"v.","m":"摇晃；握手","c":[["shake hands with","与……握手"],["shake one's head","摇头"]]},{"w":"shall","p":"aux.","m":"将要；应该","c":[["Shall we...?","我们……好吗？"]]},{"w":"shape","p":"n./v.","m":"形状；塑造","c":[["in good shape","状况良好"],["out of shape","变形"]]},{"w":"share","p":"v./n.","m":"分享；份额","c":[["share...with sb.","与某人分享……"],["share the same...","有共同的……"]]},{"w":"she","p":"pron.","m":"她","c":[["she herself","她自己"]]},{"w":"shine","p":"v.","m":"发光；照耀","c":[["shine on","照耀在……上"]]},{"w":"ship","p":"n.","m":"船","c":[["by ship","乘船"]]},{"w":"shirt","p":"n.","m":"衬衫","c":[["T-shirt","T恤衫"]]},{"w":"shoe","p":"n.","m":"鞋","c":[["a pair of shoes","一双鞋"]]},{"w":"shop","p":"n./v.","m":"商店；购物","c":[["go shopping","去购物"],["shopping mall","购物中心"]]},{"w":"short","p":"adj.","m":"短的；矮的","c":[["in short","简而言之"],["for short","作为简称"],["be short of","缺少……"]]},{"w":"should","p":"aux.","m":"应该","c":[["should do sth.","应该做某事"],["should have done","本应该做（而没做）"]]},{"w":"shout","p":"v./n.","m":"叫喊","c":[["shout at","对……大声叫喊"],["shout for help","呼救"]]},{"w":"show","p":"v./n.","m":"展示；表演","c":[["show sb. around","带某人参观"],["show off","炫耀"],["show up","出现；露面"],["on show","在展出"]]},{"w":"shut","p":"v.","m":"关闭","c":[["shut up","闭嘴"],["shut down","关闭；停工"]]},{"w":"sick","p":"adj.","m":"生病的","c":[["be sick of","厌烦……"],["feel sick","感到恶心"]]},{"w":"side","p":"n.","m":"边；面","c":[["side by side","肩并肩"],["by the side of","在……旁边"],["on the other side","在另一边"]]},{"w":"sight","p":"n.","m":"视力；景象","c":[["at first sight","乍一看"],["lose one's sight","失明"],["out of sight","看不见"]]},{"w":"sign","p":"n./v.","m":"标志；签名","c":[["traffic sign","交通标志"],["sign up","报名；注册"]]},{"w":"silence","p":"n.","m":"安静；沉默","c":[["in silence","沉默地"]]},{"w":"silent","p":"adj.","m":"沉默的；安静的","c":[["keep silent","保持沉默"]]},{"w":"silly","p":"adj.","m":"愚蠢的","c":[["Don't be silly.","别傻了。"]]},{"w":"similar","p":"adj.","m":"相似的","c":[["be similar to","与……相似"],["in a similar way","以相似的方式"]]},{"w":"simple","p":"adj.","m":"简单的","c":[["simple and easy","简单易懂"]]},{"w":"since","p":"prep./conj./adv.","m":"自从……以来；因为","c":[["ever since","从那以后"],["since then","从那时起"],["It is...since...","自从……已经……"]]},{"w":"sing","p":"v.","m":"唱","c":[["sing a song","唱歌"],["sing for","为……唱歌"]]},{"w":"single","p":"adj.","m":"单一的；单身的","c":[["a single room","单人间"],["single parent","单亲"]]},{"w":"sir","p":"n.","m":"先生","c":[["Dear Sir","尊敬的先生"]]},{"w":"sister","p":"n.","m":"姐妹","c":[["elder sister","姐姐"],["younger sister","妹妹"]]},{"w":"sit","p":"v.","m":"坐","c":[["sit down","坐下"],["sit up","坐直；熬夜"]]},{"w":"situation","p":"n.","m":"情况；形势","c":[["in a difficult situation","处于困境中"]]},{"w":"size","p":"n.","m":"大小；尺寸","c":[["in size","在大小上"],["of a size","同一尺寸"]]},{"w":"skill","p":"n.","m":"技能","c":[["basic skill","基本技能"],["language skill","语言技能"]]},{"w":"sleep","p":"v./n.","m":"睡觉","c":[["go to sleep","入睡"],["fall asleep","入睡"],["sleep well","睡得好"]]},{"w":"slow","p":"adj./adv.","m":"慢的；慢慢地","c":[["slow down","减速；慢下来"]]},{"w":"small","p":"adj.","m":"小的","c":[["a small number of","少量的"]]},{"w":"smart","p":"adj.","m":"聪明的；智能的","c":[["smart phone","智能手机"]]},{"w":"smell","p":"v./n.","m":"闻；气味","c":[["smell nice","闻起来香"],["sense of smell","嗅觉"]]},{"w":"smile","p":"v./n.","m":"微笑","c":[["smile at","对……微笑"],["with a smile","微笑着"]]},{"w":"smoke","p":"v./n.","m":"吸烟；烟","c":[["give up smoking","戒烟"],["No smoking.","禁止吸烟。"]]},{"w":"snow","p":"n./v.","m":"雪；下雪","c":[["heavy snow","大雪"],["snowy","下雪的"]]},{"w":"so","p":"adv./conj.","m":"如此；所以","c":[["so...that...","如此……以至于……"],["so that","以便"],["and so on","等等"],["or so","大约"],["I think so.","我想是的。"]]},{"w":"social","p":"adj.","m":"社会的；社交的","c":[["social problem","社会问题"],["social media","社交媒体"]]},{"w":"society","p":"n.","m":"社会","c":[["in modern society","在现代社会"]]},{"w":"soft","p":"adj.","m":"软的；柔和的","c":[["soft drink","软饮料"],["soft voice","柔和的声音"]]},{"w":"some","p":"adj./pron.","m":"一些；有些","c":[["some day","将来有一天"],["some...others...","一些……另一些……"]]},{"w":"somebody/someone","p":"pron.","m":"某人","c":[["someone else","其他人"]]},{"w":"something","p":"pron.","m":"某事；某物","c":[["something important","重要的事情"],["something else","别的东西"],["have something to do with","与……有关"]]},{"w":"sometimes","p":"adv.","m":"有时","c":[["sometimes...sometimes...","有时……有时……"]]},{"w":"somewhere","p":"adv.","m":"在某处","c":[["somewhere else","别的地方"]]},{"w":"son","p":"n.","m":"儿子","c":[["only son","独生子"]]},{"w":"soon","p":"adv.","m":"不久；很快","c":[["as soon as","一……就……"],["sooner or later","迟早"],["as soon as possible","尽快"]]},{"w":"sorry","p":"adj.","m":"抱歉的","c":[["be sorry for/about","为……感到抱歉"],["I'm sorry.","对不起。"]]},{"w":"sort","p":"n./v.","m":"种类；分类","c":[["all sorts of","各种各样的"],["sort out","整理；解决"]]},{"w":"soul","p":"n.","m":"灵魂；心灵","c":[["heart and soul","全心全意"]]},{"w":"sound","p":"n./v.","m":"声音；听起来","c":[["sound like","听起来像"],["sound great","听起来不错"]]},{"w":"south","p":"n./adj./adv.","m":"南方；南方的；向南","c":[["in the south of","在……的南部"]]},{"w":"space","p":"n.","m":"空间；太空","c":[["in space","在太空中"],["space station","空间站"],["make space for","为……腾出空间"]]},{"w":"speak","p":"v.","m":"说；讲","c":[["speak to/with sb.","与某人说话"],["speak of","谈到"],["speak up","大声说"],["generally speaking","一般来说"],["so to speak","可以说"]]},{"w":"special","p":"adj.","m":"特别的；专门的","c":[["special attention","特别注意"],["nothing special","没什么特别的"]]},{"w":"speech","p":"n.","m":"演讲；说话","c":[["give/make a speech","发表演讲"]]},{"w":"speed","p":"n./v.","m":"速度；加速","c":[["at high speed","以高速"],["speed up","加速"]]},{"w":"spend","p":"v.","m":"花费（时间/金钱）","c":[["spend...on sth.","在某物上花（钱/时间）"],["spend...(in) doing sth.","花（时间/钱）做某事"]]},{"w":"spirit","p":"n.","m":"精神；灵魂","c":[["team spirit","团队精神"],["in high spirits","情绪高涨"]]},{"w":"sport","p":"n.","m":"运动","c":[["play sports","做运动"],["sports meeting","运动会"]]},{"w":"spring","p":"n.","m":"春天；泉水","c":[["in spring","在春天"],["Spring Festival","春节"]]},{"w":"square","p":"n./adj.","m":"广场；平方的","c":[["Tian'anmen Square","天安门广场"],["square meter","平方米"]]},{"w":"stand","p":"v.","m":"站立；忍受","c":[["stand up","站起来"],["stand for","代表；象征"],["stand by","支持；袖手旁观"],["can't stand","无法忍受"]]},{"w":"standard","p":"n./adj.","m":"标准；标准的","c":[["living standard","生活水平"],["standard English","标准英语"]]},{"w":"star","p":"n.","m":"星；明星","c":[["movie star","电影明星"],["five-star hotel","五星级酒店"]]},{"w":"start","p":"v./n.","m":"开始","c":[["start to do/doing sth.","开始做某事"],["start off","出发；开始"],["to start with","首先"]]},{"w":"state","p":"n./v.","m":"状态；国家；陈述","c":[["in a good state","状态良好"],["the United States","美国"]]},{"w":"station","p":"n.","m":"站；台","c":[["bus/train station","公交/火车站"],["police station","警察局"],["radio station","广播电台"]]},{"w":"stay","p":"v./n.","m":"停留；保持","c":[["stay up","熬夜"],["stay at home","待在家里"],["stay away from","远离……"],["stay healthy","保持健康"]]},{"w":"steal","p":"v.","m":"偷","c":[["steal...from...","从……偷……"]]},{"w":"step","p":"n./v.","m":"步骤；脚步；踏","c":[["step by step","逐步地"],["take a step","迈出一步；采取步骤"],["step forward","向前一步"]]},{"w":"stick","p":"v./n.","m":"粘贴；坚持；棍","c":[["stick to","坚持"],["stick...into...","把……插入……"]]},{"w":"still","p":"adv./adj.","m":"仍然；静止的","c":[["still better","更好"]]},{"w":"stomach","p":"n.","m":"胃；肚子","c":[["on an empty stomach","空腹"]]},{"w":"stop","p":"v./n.","m":"停止；车站","c":[["stop to do sth.","停下来去做某事"],["stop doing sth.","停止做某事"],["stop...from doing","阻止……做"],["bus stop","公交站"]]},{"w":"store","p":"n./v.","m":"商店；储存","c":[["department store","百货商店"],["store up","储存"]]},{"w":"storm","p":"n.","m":"暴风雨","c":[["take...by storm","使……倾倒；突袭"]]},{"w":"story","p":"n.","m":"故事","c":[["tell a story","讲故事"],["love story","爱情故事"]]},{"w":"strange","p":"adj.","m":"奇怪的；陌生的","c":[["strange to say","说来奇怪"],["feel strange","感觉奇怪"]]},{"w":"street","p":"n.","m":"街道","c":[["on the street","在街上"],["cross the street","过马路"]]},{"w":"strict","p":"adj.","m":"严格的","c":[["be strict with sb.","对某人严格"],["be strict about sth.","对某事严格"],["strictly speaking","严格来说"]]},{"w":"strong","p":"adj.","m":"强壮的；坚强的","c":[["strong wind","强风"],["stay strong","保持坚强"]]},{"w":"student","p":"n.","m":"学生","c":[["primary/middle school student","小学生/中学生"]]},{"w":"study","p":"v./n.","m":"学习；研究","c":[["study hard","努力学习"],["study for","为……而学习"]]},{"w":"stupid","p":"adj.","m":"愚蠢的","c":[["It is stupid of sb. to do sth.","某人做某事很愚蠢"]]},{"w":"subject","p":"n.","m":"学科；主题","c":[["school subject","学校科目"],["change the subject","改变话题"]]},{"w":"succeed","p":"v.","m":"成功","c":[["succeed in doing sth.","成功做某事"]]},{"w":"success","p":"n.","m":"成功","c":[["without success","没有成功"],["achieve great success","取得巨大成功"]]},{"w":"successful","p":"adj.","m":"成功的","c":[["be successful in","在……方面成功"]]},{"w":"such","p":"adj./pron.","m":"这样的；如此的","c":[["such as","例如"],["such...that...","如此……以至于……"]]},{"w":"sudden","p":"adj.","m":"突然的","c":[["all of a sudden","突然"],["a sudden change","一个突然的变化"]]},{"w":"suffer","p":"v.","m":"遭受；受苦","c":[["suffer from","遭受……之苦"]]},{"w":"suggest","p":"v.","m":"建议；暗示","c":[["suggest doing sth.","建议做某事"],["suggest that sb. (should) do","建议某人做"]]},{"w":"suggestion","p":"n.","m":"建议","c":[["make a suggestion","提建议"]]},{"w":"summer","p":"n.","m":"夏天","c":[["in summer","在夏天"],["summer holiday","暑假"]]},{"w":"sun","p":"n.","m":"太阳","c":[["in the sun","在阳光下"],["sunrise","日出"],["sunset","日落"]]},{"w":"supermarket","p":"n.","m":"超市","c":[["in the supermarket","在超市"]]},{"w":"support","p":"v./n.","m":"支持","c":[["support one's family","养家"],["give support to","支持……"]]},{"w":"suppose","p":"v.","m":"认为；假设","c":[["be supposed to do","应该做某事"]]},{"w":"sure","p":"adj./adv.","m":"确定的；当然","c":[["make sure","确保"],["be sure of/about","对……有把握"],["for sure","肯定地"]]},{"w":"surface","p":"n.","m":"表面","c":[["on the surface","表面上；在水面上"]]},{"w":"surprise","p":"n./v.","m":"惊喜；使惊讶","c":[["to one's surprise","令某人惊讶的是"],["in surprise","惊讶地"],["be surprised at","对……感到惊讶"]]},{"w":"sweet","p":"adj./n.","m":"甜的；糖果","c":[["sweet potato","红薯"],["have a sweet tooth","爱吃甜食"]]},{"w":"swim","p":"v./n.","m":"游泳","c":[["go swimming","去游泳"],["swimming pool","游泳池"]]},{"w":"symbol","p":"n.","m":"符号；象征","c":[["the symbol of","……的象征"]]},{"w":"table","p":"n.","m":"桌子；表格","c":[["at the table","在桌旁"],["table tennis","乒乓球"],["set the table","摆桌子"]]},{"w":"take","p":"v.","m":"拿；花费；乘坐","c":[["take off","脱下；起飞"],["take on","呈现；承担"],["take out","取出"],["take place","发生"],["take part in","参加"],["take care of","照顾"],["take up","开始从事；占据"],["take over","接管"],["take photos","拍照"],["take it easy","别紧张"]]},{"w":"talk","p":"v./n.","m":"谈话；讲话","c":[["talk about","谈论"],["talk to/with","与……交谈"],["talk over","讨论"],["have a talk","交谈"],["small talk","闲聊"]]},{"w":"tall","p":"adj.","m":"高的","c":[["a tall building","高楼"]]},{"w":"taste","p":"n./v.","m":"味道；品尝","c":[["taste good/delicious","尝起来好/美味"],["have a taste for","对……有兴趣/品味"]]},{"w":"taxi","p":"n.","m":"出租车","c":[["take a taxi","打的"],["call a taxi","叫出租车"]]},{"w":"tea","p":"n.","m":"茶","c":[["make tea","泡茶"],["green/black tea","绿/红茶"]]},{"w":"teach","p":"v.","m":"教","c":[["teach sb. to do sth.","教某人做某事"],["teach oneself","自学"],["teach sb. a lesson","给某人一个教训"]]},{"w":"teacher","p":"n.","m":"老师","c":[["head teacher","校长；班主任"]]},{"w":"team","p":"n.","m":"团队","c":[["team spirit","团队精神"],["team member","队员"]]},{"w":"technology","p":"n.","m":"技术","c":[["modern technology","现代科技"],["IT (information technology)","信息技术"]]},{"w":"telephone","p":"n./v.","m":"电话","c":[["on the telephone","在通电话"],["answer the telephone","接电话"]]},{"w":"television/TV","p":"n.","m":"电视","c":[["watch TV","看电视"],["on TV","在电视上"]]},{"w":"tell","p":"v.","m":"告诉；辨别","c":[["tell sb. to do sth.","告诉某人做某事"],["tell a story","讲故事"],["tell the difference","辨别差异"],["tell the truth","说实话"],["to tell the truth","说实话"]]},{"w":"temperature","p":"n.","m":"温度","c":[["take one's temperature","量体温"],["high/low temperature","高/低温"]]},{"w":"term","p":"n.","m":"学期；术语","c":[["this term","这学期"],["in the long term","从长远来看"]]},{"w":"terrible","p":"adj.","m":"可怕的；糟糕的","c":[["feel terrible","感觉很糟"]]},{"w":"test","p":"n./v.","m":"测试","c":[["have a test","参加测验"],["pass/fail a test","通过/未通过测验"]]},{"w":"than","p":"conj./prep.","m":"比","c":[["more than","多于；超过"],["less than","少于"],["rather than","而不是"]]},{"w":"thank","p":"v./n.","m":"感谢","c":[["thank sb. for","为……感谢某人"],["thanks to","多亏了"],["thank you","谢谢"],["Thanks a lot.","非常感谢。"]]},{"w":"that","p":"pron./conj./adj.","m":"那；那个","c":[["that is to say","也就是说"],["so...that...","如此……以至于……"],["in that case","那样的话"]]},{"w":"themselves","p":"pron.","m":"他们自己","c":[["by themselves","靠他们自己"],["enjoy themselves","他们玩得开心"]]},{"w":"then","p":"adv.","m":"然后；那时","c":[["by then","到那时"],["from then on","从那时起"],["just then","就在那时"]]},{"w":"there","p":"adv.","m":"在那里","c":[["there be","有（存在句）"],["over there","在那边"],["here and there","到处"]]},{"w":"thick","p":"adj.","m":"厚的；浓的","c":[["thick and fast","密集地"]]},{"w":"thin","p":"adj.","m":"薄的；瘦的","c":[["thin air","稀薄的空气"]]},{"w":"thing","p":"n.","m":"东西；事情","c":[["a few things","一些事情"],["for one thing","首先；一则"]]},{"w":"think","p":"v.","m":"想；认为","c":[["think about","考虑"],["think of","想到；认为"],["think over","仔细考虑"],["think up","想出"],["think twice","再三考虑"]]},{"w":"thirsty","p":"adj.","m":"渴的","c":[["be thirsty for","渴望……"],["feel thirsty","感到口渴"]]},{"w":"though","p":"conj./adv.","m":"虽然；不过","c":[["as though","好像"],["even though","即使"]]},{"w":"thought","p":"n.","m":"思想；想法","c":[["in deep thought","陷入沉思"],["on second thought","转念一想"]]},{"w":"thousand","p":"n.","m":"千","c":[["thousands of","数以千计的"],["one thousand","一千"]]},{"w":"through","p":"prep./adv.","m":"穿过；通过","c":[["go through","经历；穿过"],["look through","浏览"],["get through","通过；完成"],["through and through","彻底地"]]},{"w":"throw","p":"v.","m":"扔；投","c":[["throw away","扔掉"],["throw out","抛出；扔掉"],["throw...at...","把……向……扔去"]]},{"w":"ticket","p":"n.","m":"票","c":[["buy a ticket","买票"],["book a ticket","订票"],["ticket office","售票处"]]},{"w":"tidy","p":"adj./v.","m":"整洁的；整理","c":[["tidy up","整理干净"],["keep...tidy","使……保持整洁"]]},{"w":"tie","p":"n./v.","m":"领带；系；平局","c":[["tie...to...","把……系在……上"],["tie up","系好；捆绑"]]},{"w":"time","p":"n.","m":"时间；次数","c":[["on time","准时"],["in time","及时"],["all the time","一直"],["from time to time","不时地"],["at the same time","同时"],["take one's time","慢慢来"],["once upon a time","从前"],["have a good time","玩得开心"],["it's time to do","该做……了"]]},{"w":"tired","p":"adj.","m":"疲惫的","c":[["be tired of","厌烦……"],["be tired from","因……感到疲劳"],["feel tired","感到疲劳"]]},{"w":"title","p":"n.","m":"标题；头衔","c":[["the title of","……的标题"]]},{"w":"to","p":"prep.","m":"到；向；对于","c":[["to one's surprise/joy","令某人惊讶/高兴的是"],["to be honest","说实话"],["to the point","切题；中肯"]]},{"w":"today","p":"n./adv.","m":"今天","c":[["today's newspaper","今天的报纸"]]},{"w":"together","p":"adv.","m":"一起","c":[["get together","聚集；聚会"],["together with","与……一起"],["put together","组装；汇集"]]},{"w":"tomorrow","p":"n./adv.","m":"明天","c":[["the day after tomorrow","后天"],["tomorrow morning","明天早上"]]},{"w":"too","p":"adv.","m":"也；太","c":[["too...to...","太……而不能……"],["too much","太多（不可数）"],["too many","太多（可数）"],["me too","我也是"]]},{"w":"tool","p":"n.","m":"工具","c":[["a useful tool","有用的工具"]]},{"w":"top","p":"n./adj.","m":"顶部；顶部的","c":[["on the top of","在……顶部"],["top student","尖子生"],["from top to bottom","从上到下"]]},{"w":"total","p":"adj./n.","m":"总的；总数","c":[["in total","总计"],["a total of","总计"]]},{"w":"touch","p":"v./n.","m":"触摸；接触","c":[["keep in touch with","与……保持联系"],["get in touch with","与……取得联系"],["lose touch with","与……失去联系"]]},{"w":"tour","p":"n./v.","m":"旅游；观光","c":[["go on a tour","去旅游"],["tour guide","导游"]]},{"w":"tourist","p":"n.","m":"游客","c":[["tourist attraction","旅游景点"]]},{"w":"toward(s)","p":"prep.","m":"朝；向","c":[["walk toward(s)","朝……走去"]]},{"w":"town","p":"n.","m":"城镇","c":[["in town","在镇上"],["home town","家乡"]]},{"w":"trade","p":"n./v.","m":"贸易；交易","c":[["trade with","与……交易/贸易"]]},{"w":"tradition","p":"n.","m":"传统","c":[["by tradition","按照传统"],["cultural tradition","文化传统"]]},{"w":"traffic","p":"n.","m":"交通","c":[["traffic jam","交通堵塞"],["traffic light","交通灯"],["heavy traffic","交通拥挤"]]},{"w":"train","p":"n./v.","m":"火车；训练","c":[["by train","坐火车"],["catch a train","赶火车"],["train sb. to do","训练某人做"]]},{"w":"travel","p":"v./n.","m":"旅行","c":[["travel around the world","环游世界"],["travel agency","旅行社"]]},{"w":"treasure","p":"n./v.","m":"宝藏；珍视","c":[["treasure...as...","把……当作宝贝珍藏"]]},{"w":"treat","p":"v./n.","m":"对待；治疗；款待","c":[["treat...as...","把……当作……对待"],["treat sb. to","请某人吃……"]]},{"w":"tree","p":"n.","m":"树","c":[["family tree","家谱"],["plant trees","种树"]]},{"w":"trip","p":"n.","m":"旅行；行程","c":[["go on a trip","去旅行"],["school trip","学校郊游"],["have a good trip","旅途愉快"]]},{"w":"trouble","p":"n./v.","m":"麻烦；困难","c":[["in trouble","处于困境中"],["get into trouble","惹上麻烦"],["have trouble (in) doing","做某事有困难"]]},{"w":"true","p":"adj.","m":"真实的；正确的","c":[["come true","实现；成真"],["true love","真爱"],["it is true that...","……是真实的"]]},{"w":"trust","p":"v./n.","m":"信任","c":[["trust in","信任；信赖"],["trust sb. to do","放心托付某人做"]]},{"w":"truth","p":"n.","m":"真相；真理","c":[["tell the truth","说实话"],["to tell the truth","说实话"],["in truth","事实上"]]},{"w":"try","p":"v./n.","m":"尝试；努力","c":[["try on","试穿"],["try out","试验；尝试"],["try one's best","尽力"],["have a try","试一试"],["try to do/doing","努力做/尝试做"]]},{"w":"turn","p":"v./n.","m":"转；变成；轮流","c":[["turn on","打开"],["turn off","关掉"],["turn up","调大；出现"],["turn down","调小；拒绝"],["turn into","变成"],["turn out","结果是；证明是"],["turn over","翻转；移交"],["take turns","轮流"],["in turn","依次地"]]},{"w":"twice","p":"adv.","m":"两次；两倍","c":[["think twice","再三考虑"],["once or twice","一两次"]]},{"w":"type","p":"n./v.","m":"类型；打字","c":[["a type of","一种"],["blood type","血型"]]},{"w":"ugly","p":"adj.","m":"丑陋的","c":[["an ugly building","难看的建筑"]]},{"w":"umbrella","p":"n.","m":"雨伞","c":[["take an umbrella","带一把雨伞"]]},{"w":"uncle","p":"n.","m":"叔叔；舅舅","c":[["Uncle Sam","山姆大叔（美国）"]]},{"w":"under","p":"prep./adv.","m":"在……下面","c":[["under control","在控制下"],["under the weather","身体不适"],["under way","在进行中"]]},{"w":"understand","p":"v.","m":"理解；明白","c":[["make oneself understood","使别人理解自己"],["understand each other","互相理解"]]},{"w":"university","p":"n.","m":"大学","c":[["go to university","上大学"]]},{"w":"unless","p":"conj.","m":"除非","c":[["unless it rains","除非下雨"]]},{"w":"until","p":"conj./prep.","m":"直到……为止","c":[["not...until...","直到……才……"],["until now","直到现在"]]},{"w":"up","p":"adv./prep.","m":"向上；起来","c":[["get up","起床"],["stand up","站起来"],["give up","放弃"],["turn up","出现；调大"],["up to","多达；取决于"],["up and down","上上下下"]]},{"w":"upon","p":"prep.","m":"在……上面（=on，正式）","c":[["once upon a time","从前"],["depend upon","依靠；取决于"]]},{"w":"us","p":"pron.","m":"我们（宾格）","c":[["Let us...","让我们……"]]},{"w":"use","p":"v./n.","m":"使用；用途","c":[["use up","用完；耗尽"],["make use of","利用"],["be used to do","被用来做"],["be/get used to doing","习惯于做"],["used to do","过去常常做"]]},{"w":"useful","p":"adj.","m":"有用的","c":[["be useful to","对……有用"],["find...useful","发现……有用"]]},{"w":"useless","p":"adj.","m":"无用的","c":[["be useless to do","做……是无用的"]]},{"w":"usual","p":"adj.","m":"通常的","c":[["as usual","像往常一样"],["than usual","比平常"]]},{"w":"usually","p":"adv.","m":"通常","c":[["usually do sth.","通常做某事"]]},{"w":"vacation","p":"n.","m":"假期","c":[["on vacation","在度假"],["summer vacation","暑假"],["take a vacation","休假"]]},{"w":"value","p":"n./v.","m":"价值；重视","c":[["be of great value","很有价值"],["value...as...","把……珍视为……"]]},{"w":"various","p":"adj.","m":"各种各样的","c":[["various kinds of","各种各样的"]]},{"w":"very","p":"adv./adj.","m":"非常；正是","c":[["very much","非常"],["very well","很好"],["the very same","完全相同的"]]},{"w":"victory","p":"n.","m":"胜利","c":[["win a victory","取得胜利"]]},{"w":"video","p":"n.","m":"视频；录像","c":[["video game","电子游戏"],["make a video","制作视频"]]},{"w":"view","p":"n./v.","m":"视野；风景；观点","c":[["point of view","观点"],["in one's view","在某人看来"],["come into view","出现在眼前"]]},{"w":"village","p":"n.","m":"村庄","c":[["in the village","在村里"],["village life","乡村生活"]]},{"w":"visit","p":"v./n.","m":"参观；拜访","c":[["visit a friend","拜访朋友"],["pay a visit to","拜访……"],["on a visit to","在访问……"]]},{"w":"visitor","p":"n.","m":"访问者；游客","c":[["attract visitors","吸引游客"]]},{"w":"voice","p":"n.","m":"声音；嗓音","c":[["in a low/loud voice","低声/大声地"],["raise one's voice","提高嗓门"]]},{"w":"volunteer","p":"n./v.","m":"志愿者；自愿","c":[["volunteer to do sth.","自愿做某事"],["work as a volunteer","做志愿者工作"]]},{"w":"wait","p":"v.","m":"等待","c":[["wait for","等待"],["wait a minute","等一下"],["can't wait to do","迫不及待做某事"],["wait and see","等着瞧"]]},{"w":"wake","p":"v.","m":"醒来；叫醒","c":[["wake up","醒来；叫醒"],["wake sb. up","叫醒某人"]]},{"w":"walk","p":"v./n.","m":"走路；散步","c":[["go for a walk","去散步"],["walk around","四处走走"],["walk along","沿着……走"]]},{"w":"wall","p":"n.","m":"墙","c":[["on the wall","在墙上（表面）"],["in the wall","在墙里（里面）"],["the Great Wall","长城"]]},{"w":"want","p":"v.","m":"想要","c":[["want to do sth.","想要做某事"],["want sb. to do","想要某人做"]]},{"w":"war","p":"n.","m":"战争","c":[["at war","处于战争状态"],["world war","世界大战"]]},{"w":"warm","p":"adj./v.","m":"温暖的；使暖和","c":[["warm up","热身；变暖"],["keep warm","保暖"]]},{"w":"warn","p":"v.","m":"警告","c":[["warn sb. of/about","警告某人注意……"],["warn sb. not to do","警告某人不要做"]]},{"w":"wash","p":"v.","m":"洗","c":[["wash up","洗餐具；洗手洗脸"],["wash away","冲走"]]},{"w":"waste","p":"n./v./adj.","m":"浪费；废物","c":[["waste time (in) doing","浪费时间做……"],["a waste of time","浪费时间"]]},{"w":"watch","p":"v./n.","m":"观看；手表","c":[["watch TV","看电视"],["watch out","当心；小心"],["watch over","照看"]]},{"w":"water","p":"n./v.","m":"水；浇水","c":[["by water","由水路"],["water the flowers","浇花"]]},{"w":"way","p":"n.","m":"路；方法","c":[["by the way","顺便说一下"],["in the way","挡路；妨碍"],["on the way to","在去……的路上"],["in a way","在某种程度上"],["make one's way","前进；成功"],["no way","不可能"]]},{"w":"we","p":"pron.","m":"我们","c":[["we ourselves","我们自己"]]},{"w":"weak","p":"adj.","m":"弱的","c":[["be weak in","在……方面弱"]]},{"w":"wealth","p":"n.","m":"财富","c":[["a wealth of","大量的……"]]},{"w":"wear","p":"v.","m":"穿；戴","c":[["wear out","穿破；使筋疲力尽"],["wear glasses","戴眼镜"]]},{"w":"weather","p":"n.","m":"天气","c":[["weather report/forecast","天气预报"],["bad weather","坏天气"]]},{"w":"website","p":"n.","m":"网站","c":[["on the website","在网站上"]]},{"w":"week","p":"n.","m":"周；星期","c":[["next/last week","下/上周"],["on weekdays","在工作日"]]},{"w":"weekend","p":"n.","m":"周末","c":[["at/on the weekend","在周末"],["have a nice weekend","周末愉快"]]},{"w":"weigh","p":"v.","m":"称重；重量为","c":[["weigh oneself","称体重"]]},{"w":"weight","p":"n.","m":"重量","c":[["lose weight","减肥"],["put on weight","增重"]]},{"w":"welcome","p":"adj./v./n.","m":"受欢迎的；欢迎","c":[["Welcome to...","欢迎来到……"],["You're welcome.","不客气。"]]},{"w":"well","p":"adv./adj./n.","m":"好；健康的；井","c":[["as well","也；同样"],["as well as","也；以及；和……一样好"],["do well in","在……方面做得好"]]},{"w":"west","p":"n./adj./adv.","m":"西方；西方的；向西","c":[["in the west of","在……的西部"]]},{"w":"wet","p":"adj.","m":"湿的","c":[["get wet","变湿；淋湿"]]},{"w":"what","p":"pron./adj.","m":"什么","c":[["what about","……怎么样"],["what if","如果……怎么办"],["what's more","更重要的是"],["what's wrong","怎么了"]]},{"w":"when","p":"adv./conj.","m":"什么时候；当……时","c":[["when to do","何时做"]]},{"w":"where","p":"adv./conj.","m":"在哪里","c":[["where to go","去哪里"]]},{"w":"whether","p":"conj.","m":"是否","c":[["whether...or not","是否"],["whether...or...","是……还是……"]]},{"w":"which","p":"pron./adj.","m":"哪一个","c":[["which one","哪一个"]]},{"w":"while","p":"conj./n.","m":"当……的时候；而；一段时间","c":[["after a while","过了一会儿"],["for a while","一会儿"],["once in a while","偶尔"]]},{"w":"white","p":"adj./n.","m":"白色的；白色","c":[["in white","穿白衣服"],["white lie","善意的谎言"]]},{"w":"who","p":"pron.","m":"谁","c":[["who else","还有谁"]]},{"w":"whole","p":"adj./n.","m":"整个的；全部","c":[["the whole of","整个……"],["as a whole","总体上"],["on the whole","总的来说"]]},{"w":"whom","p":"pron.","m":"谁（宾格）","c":[["to whom","对谁（正式）"]]},{"w":"whose","p":"pron.","m":"谁的","c":[["Whose is this?","这是谁的？"]]},{"w":"why","p":"adv.","m":"为什么","c":[["Why not do...?","为什么不做……？"],["That's why...","那就是为什么……"]]},{"w":"wide","p":"adj./adv.","m":"宽的；广泛地","c":[["far and wide","到处；广泛地"],["wide open","敞开的"]]},{"w":"wife","p":"n.","m":"妻子","c":[["husband and wife","夫妻"]]},{"w":"will","p":"aux./n.","m":"将；愿意；意志","c":[["will do","将会做"],["against one's will","违背某人的意愿"],["free will","自由意志"]]},{"w":"win","p":"v.","m":"赢得；获胜","c":[["win the game","赢得比赛"],["win over","争取过来"]]},{"w":"wind","p":"n.","m":"风","c":[["strong wind","大风"],["wind up","结束；上发条"]]},{"w":"window","p":"n.","m":"窗户","c":[["out of the window","窗户外面"]]},{"w":"winter","p":"n.","m":"冬天","c":[["in winter","在冬天"],["winter holiday","寒假"]]},{"w":"wish","p":"v./n.","m":"希望；祝愿","c":[["wish to do sth.","希望做某事"],["wish sb. to do","希望某人做"],["make a wish","许愿"],["Best wishes!","最好的祝愿！"]]},{"w":"with","p":"prep.","m":"和；用；带有","c":[["with the help of","在……的帮助下"],["be angry with","生……的气"],["be busy with","忙于……"],["be satisfied with","对……满意"],["agree with","同意"]]},{"w":"without","p":"prep.","m":"没有","c":[["without doubt","毫无疑问"],["do without","没有……也行"],["without hesitation","毫不犹豫"]]},{"w":"woman","p":"n.","m":"女人（复: women）","c":[["women's rights","妇女权利"]]},{"w":"wonder","p":"v./n.","m":"想知道；奇迹","c":[["no wonder","难怪"],["wonder about","对……感到好奇"],["it's a wonder that...","……真是个奇迹"]]},{"w":"wonderful","p":"adj.","m":"精彩的；极好的","c":[["have a wonderful time","玩得非常开心"]]},{"w":"wood","p":"n.","m":"木头；树林","c":[["be made of wood","由木头制成"],["in the woods","在树林里"]]},{"w":"word","p":"n.","m":"单词；话","c":[["in a word","总之；一句话"],["in other words","换句话说"],["keep one's word","遵守诺言"],["have a word with","与……说句话"]]},{"w":"work","p":"v./n.","m":"工作；作品","c":[["work on","从事；继续工作"],["work out","解决；锻炼；计算出"],["work hard","努力工作"],["at work","在工作"],["out of work","失业"]]},{"w":"worker","p":"n.","m":"工人；工作者","c":[["hard worker","勤奋的工人"]]},{"w":"world","p":"n.","m":"世界","c":[["all over the world","全世界"],["in the world","世界上；究竟"],["world peace","世界和平"]]},{"w":"worried","p":"adj.","m":"担心的","c":[["be worried about","为……担心"]]},{"w":"worry","p":"v./n.","m":"担心","c":[["worry about","担心……"],["Don't worry.","别担心。"]]},{"w":"worse","p":"adj./adv.","m":"更坏的（bad的比较级）","c":[["even worse","更糟"],["from bad to worse","越来越糟"]]},{"w":"worst","p":"adj./adv.","m":"最坏的（bad的最高级）","c":[["the worst of all","最糟的"],["at worst","在最坏的情况下"]]},{"w":"worth","p":"adj./n.","m":"值得的；价值","c":[["be worth doing","值得做"],["be worth the effort","值得努力"]]},{"w":"would","p":"aux.","m":"将；愿意（will的过去式）","c":[["would like to do","想要做"],["would rather do...than do...","宁愿做……而不愿做"]]},{"w":"wound","p":"n./v.","m":"伤口；受伤","c":[["be wounded in","在……中受伤"]]},{"w":"write","p":"v.","m":"写","c":[["write to","给……写信"],["write back","回信"],["write down","写下"],["write about","写关于……"]]},{"w":"writer","p":"n.","m":"作家","c":[["a famous writer","著名作家"]]},{"w":"wrong","p":"adj./adv./n.","m":"错误的；错误地；错误","c":[["go wrong","出问题"],["do wrong","做错事"],["What's wrong?","怎么了？"],["right or wrong","对或错"]]},{"w":"year","p":"n.","m":"年","c":[["this/last/next year","今/去/明年"],["all year round","一年到头"],["year after year","年复一年"],["for years","多年以来"]]},{"w":"yellow","p":"adj./n.","m":"黄色的；黄色","c":[["Yellow River","黄河"]]},{"w":"yes","p":"adv.","m":"是的","c":[["say yes to","同意……"]]},{"w":"yesterday","p":"n./adv.","m":"昨天","c":[["the day before yesterday","前天"],["yesterday morning","昨天早上"]]},{"w":"yet","p":"adv./conj.","m":"还；然而","c":[["not yet","还没有"],["and yet","然而；可是"]]},{"w":"you","p":"pron.","m":"你；你们","c":[["you yourself","你自己"]]},{"w":"young","p":"adj.","m":"年轻的","c":[["the young","年轻人"],["young and old","老少"]]},{"w":"zero","p":"n./adj.","m":"零；零的","c":[["below zero","零度以下"]]},{"w":"zoo","p":"n.","m":"动物园","c":[["go to the zoo","去动物园"]]}];
+const WORDS_PER_UNIT = 28;
+// UNITS computed at runtime to avoid data duplication
+const UNITS = [];
+for (let i = 0; i < VOCAB_RAW.length; i += WORDS_PER_UNIT) {
+  UNITS.push({
+    id: Math.floor(i / WORDS_PER_UNIT) + 1,
+    title: 'Unit ' + (Math.floor(i / WORDS_PER_UNIT) + 1),
+    words: VOCAB_RAW.slice(i, i + WORDS_PER_UNIT)
+  });
+}
+</script>
+<script>// ============ Store Layer ============
+const Store = {
+  get(key, def) { try { const v = localStorage.getItem('vv_'+key); return v ? JSON.parse(v) : def; } catch(e) { return def; } },
+  set(key, val) { localStorage.setItem('vv_'+key, JSON.stringify(val)); },
+  remove(key) { localStorage.removeItem('vv_'+key); }
+};
+
+function initStore() {
+  if (!Store.get('progress')) Store.set('progress', {});     // {wordKey: 'new'|'learning'|'mastered'}
+  if (!Store.get('errors')) Store.set('errors', {});          // {wordKey: {count, lastTime, history:[]}}
+  if (!Store.get('checkins')) Store.set('checkins', {});      // {dateStr: true}
+  if (!Store.get('testHistory')) Store.set('testHistory', []);// [{date, score, total, mode}]
+  if (!Store.get('settings')) Store.set('settings', {theme:'light', dailyWords:28, sound:false});
+}
+
+// Helper: word key = word.toLowerCase()
+function wk(w) { return (typeof w === 'string') ? w.toLowerCase() : w.w.toLowerCase(); }
+
+// ============ Toast ============
+function showToast(msg, type='info') {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast '+type; t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity .3s'; setTimeout(()=>t.remove(),300); }, 2500);
+}
+
+// ============ Confetti ============
+function confetti() {
+  const colors = ['#2563EB','#F59E0B','#10B981','#EF4444','#8B5CF6','#EC4899'];
+  for (let i=0; i<60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = Math.random()*100+'vw';
+    el.style.top = -(Math.random()*20)+'vh';
+    el.style.background = colors[Math.floor(Math.random()*colors.length)];
+    el.style.animationDuration = (1.5+Math.random()*2)+'s';
+    el.style.animationDelay = Math.random()*.5+'s';
+    el.style.width = (6+Math.random()*8)+'px';
+    el.style.height = (6+Math.random()*8)+'px';
+    el.style.borderRadius = Math.random()>.5?'50%':'0';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 3000);
+  }
+}
+
+// ============ Router ============
+let currentTab = 'dashboard';
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-content').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mnav-tab').forEach(b => b.classList.remove('active'));
+
+  const sec = document.getElementById('tab-'+tab);
+  if (sec) sec.classList.add('active');
+
+  document.querySelectorAll('.nav-tab[data-tab="'+tab+'"]').forEach(b => b.classList.add('active'));
+  document.querySelectorAll('.mnav-tab[data-tab="'+tab+'"]').forEach(b => b.classList.add('active'));
+
+  renderTab(tab);
+  // Scroll to top
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderTab(tab) {
+  switch(tab) {
+    case 'dashboard': renderDashboard(); break;
+    case 'study': renderStudy(); break;
+    case 'dictation': renderDictation(); break;
+    case 'errors': renderErrors(); break;
+    case 'plan': renderPlan(); break;
+    case 'stats': renderStats(); break;
+    case 'search': renderSearch(); break;
+  }
+}
+
+// ============ Dashboard ============
+function renderDashboard() {
+  const el = document.getElementById('tab-dashboard');
+  const progress = Store.get('progress');
+  const errors = Store.get('errors');
+  const checkins = Store.get('checkins');
+  const testHistory = Store.get('testHistory');
+  const totalWords = VOCAB_RAW.length;
+  const mastered = Object.values(progress).filter(v => v === 'mastered').length;
+  const learning = Object.values(progress).filter(v => v === 'learning').length;
+  const errorCount = Object.keys(errors).length;
+
+  // Streak calculation
+  const today = new Date();
+  let streak = 0;
+  for (let d = new Date(today); ; d.setDate(d.getDate()-1)) {
+    const ds = d.toISOString().slice(0,10);
+    if (checkins[ds]) streak++;
+    else break;
+  }
+
+  // Today's task
+  const settings = Store.get('settings');
+  const dailyWords = settings.dailyWords || 28;
+  const todayUnit = Math.floor(mastered / dailyWords) + 1;
+  const todayUnitIdx = Math.min(todayUnit - 1, UNITS.length - 1);
+
+  // Recent tests
+  const recentTests = testHistory.slice(-5).reverse();
+
+  el.innerHTML = `
+    <h2 style="font-size:1.5rem;margin-bottom:16px">📊 学习仪表盘</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">${totalWords}</div>
+        <div class="stat-label">总词汇量</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-value">${mastered}</div>
+        <div class="stat-label">已掌握</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-value">${learning}</div>
+        <div class="stat-label">学习中</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-value">${errorCount}</div>
+        <div class="stat-label">错题数</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value"><span class="streak-flame">🔥</span> ${streak}</div>
+        <div class="stat-label">连续打卡天数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${Math.round(mastered/totalWords*100)}%</div>
+        <div class="stat-label">掌握率</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${testHistory.length}</div>
+        <div class="stat-label">完成测试次数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${UNITS.length}</div>
+        <div class="stat-label">学习单元数</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">📌 今日推荐任务</div>
+      <p style="margin-bottom:12px">建议学习 <strong>第 ${todayUnit} 单元</strong>（${dailyWords} 个单词），包含以下内容：</p>
+      <div class="flex-row" style="margin-bottom:16px">
+        ${UNITS[todayUnitIdx] ? UNITS[todayUnitIdx].words.slice(0,6).map(w => `<span class="badge badge-primary">${w.w}</span>`).join(' ') : ''}
+        ${UNITS[todayUnitIdx] && UNITS[todayUnitIdx].words.length > 6 ? `<span class="badge">+${UNITS[todayUnitIdx].words.length-6} more</span>` : ''}
+      </div>
+      <div class="flex-row">
+        <button class="btn btn-primary" onclick="switchTab('study');selectUnit(${todayUnitIdx});">📖 开始学习</button>
+        <button class="btn btn-accent" onclick="switchTab('dictation');startDictation(${todayUnitIdx});">✍️ 今日默写</button>
+        <button class="btn btn-outline" onclick="checkinToday()">✅ 今日打卡</button>
+      </div>
+    </div>
+
+    ${recentTests.length ? `
+    <div class="card">
+      <div class="card-header">📝 最近测试记录</div>
+      ${recentTests.map(t => `
+        <div class="error-item">
+          <span style="min-width:90px">${t.date}</span>
+          <span class="badge badge-primary">${t.mode||'默写'}</span>
+          <span style="margin-left:auto;font-weight:700">${t.score}/${t.total}</span>
+          <span class="badge ${t.score/t.total>=0.8?'badge-success':t.score/t.total>=0.6?'badge-accent':'badge-danger'}">${Math.round(t.score/t.total*100)}%</span>
+        </div>
+      `).join('')}
+    </div>` : ''}
+  `;
+}
+
+function checkinToday() {
+  const ds = new Date().toISOString().slice(0,10);
+  const checkins = Store.get('checkins');
+  if (checkins[ds]) { showToast('今日已打卡！🔥','info'); return; }
+  checkins[ds] = true;
+  Store.set('checkins', checkins);
+  confetti();
+  showToast('打卡成功！继续加油！🎉','success');
+  renderDashboard();
+}
+
+// ============ Study Mode ============
+let studyUnitIdx = 0;
+let studyWordIdx = 0;
+
+function selectUnit(idx) {
+  studyUnitIdx = idx;
+  studyWordIdx = 0;
+  renderStudy();
+}
+
+function renderStudy() {
+  const el = document.getElementById('tab-study');
+  const unit = UNITS[studyUnitIdx];
+  if (!unit) { el.innerHTML = '<p>加载中...</p>'; return; }
+  const word = unit.words[studyWordIdx];
+  if (!word) { el.innerHTML = '<p>无可显示的单词</p>'; return; }
+
+  const progress = Store.get('progress');
+  const unitCompleted = unit.words.every(w => progress[wk(w)] === 'mastered');
+
+  el.innerHTML = `
+    <h2 style="font-size:1.5rem;margin-bottom:12px">📖 单元学习</h2>
+
+    <div class="flex-between mb-2">
+      <select onchange="selectUnit(parseInt(this.value))" style="max-width:200px">
+        ${UNITS.map((u,i) => `<option value="${i}" ${i===studyUnitIdx?'selected':''}>Unit ${u.id} (${u.words.length}词)</option>`).join('')}
+      </select>
+      <span class="text-sm text-muted">共 ${UNITS.length} 个单元</span>
+    </div>
+
+    <div class="progress-bar mb-2">
+      <div class="progress-fill" style="width:${unit.words.filter(w=>progress[wk(w)]==='mastered').length/unit.words.length*100}%"></div>
+    </div>
+    <div class="progress-label mb-2">
+      <span>已掌握: ${unit.words.filter(w=>progress[wk(w)]==='mastered').length}/${unit.words.length}</span>
+      <span>${Math.round(unit.words.filter(w=>progress[wk(w)]==='mastered').length/unit.words.length*100)}%</span>
+    </div>
+
+    <div class="word-card" id="wordCard" onclick="flipCard()">
+      <span class="card-index">${studyWordIdx+1}/${unit.words.length}</span>
+      <span class="flip-hint">点击翻转 👆</span>
+      <div class="word-front">
+        <div class="word-text">${word.w}</div>
+        <div class="word-pos">${word.p}</div>
+        <div class="word-meaning">${word.m}</div>
+      </div>
+      <div class="word-back">
+        <div style="font-weight:700;margin-bottom:6px;color:var(--text-secondary)">📎 固定搭配：</div>
+        ${word.c.map(c => `<div class="colloc-item"><span class="colloc-en">${c[0]}</span><span class="colloc-zh">${c[1]}</span></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="study-nav">
+      <button onclick="prevWord()" ${studyWordIdx===0?'disabled':''}>◀</button>
+      <span class="study-position">${studyWordIdx+1} / ${unit.words.length}</span>
+      <button onclick="nextWord()" ${studyWordIdx>=unit.words.length-1?'disabled':''}>▶</button>
+    </div>
+
+    <div class="flex-row" style="justify-content:center;gap:8px;margin-top:8px">
+      <button class="btn btn-sm btn-outline" onclick="markWord('${wk(word)}','learning')">📌 学习中</button>
+      <button class="btn btn-sm btn-success" onclick="markWord('${wk(word)}','mastered');nextWord()" style="background:var(--success);color:#fff">✅ 已掌握</button>
+    </div>
+  `;
+}
+
+function flipCard() {
+  document.getElementById('wordCard')?.classList.toggle('flipped');
+}
+
+function prevWord() { if (studyWordIdx > 0) { studyWordIdx--; renderStudy(); } }
+function nextWord() {
+  const unit = UNITS[studyUnitIdx];
+  if (studyWordIdx < unit.words.length - 1) { studyWordIdx++; renderStudy(); }
+  else {
+    showToast('🎉 本单元学习完毕！','success');
+    if (studyUnitIdx < UNITS.length - 1) { studyUnitIdx++; studyWordIdx = 0; renderStudy(); }
+  }
+}
+
+function markWord(wordKey, status) {
+  const progress = Store.get('progress');
+  progress[wordKey] = status;
+  Store.set('progress', progress);
+  const statusMap = {new:'未学',learning:'学习中',mastered:'已掌握'};
+  showToast(`标记为：${statusMap[status]||status}`,'info');
+}
+
+// ============ Dictation Mode ============
+let dictMode = 'en2zh'; // 'en2zh' | 'zh2en' | 'colloc'
+let dictUnitIdx = 0;
+let dictWords = [];
+let dictIdx = 0;
+let dictScore = 0;
+let dictTotal = 0;
+let dictAnswered = false;
+
+function startDictation(unitIdx) {
+  dictUnitIdx = unitIdx !== undefined ? unitIdx : dictUnitIdx;
+  dictWords = [...UNITS[dictUnitIdx].words];
+  // Shuffle
+  for (let i = dictWords.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [dictWords[i],dictWords[j]] = [dictWords[j],dictWords[i]]; }
+  dictIdx = 0;
+  dictScore = 0;
+  dictTotal = 0;
+  dictAnswered = false;
+  switchTab('dictation');
+}
+
+function renderDictation() {
+  const el = document.getElementById('tab-dictation');
+  if (dictWords.length === 0) { el.innerHTML = '<p>请先在单元学习中选择单元再开始默写</p>'; return; }
+  const word = dictWords[dictIdx];
+  if (!word) {
+    // Dictation complete
+    const pct = dictTotal > 0 ? Math.round(dictScore/dictTotal*100) : 0;
+    el.innerHTML = `
+      <h2 style="font-size:1.5rem;margin-bottom:16px">✍️ 默写完成！</h2>
+      <div class="card text-center">
+        <div style="font-size:3rem;margin:16px 0">${pct>=80?'🎉':pct>=60?'👍':'💪'}</div>
+        <div class="stat-value">${dictScore}/${dictTotal}</div>
+        <div class="stat-label">正确率 ${pct}%</div>
+        <div class="mt-2 flex-row" style="justify-content:center">
+          <button class="btn btn-primary" onclick="startDictation(${dictUnitIdx})">🔄 重新默写</button>
+          <button class="btn btn-outline" onclick="switchTab('errors')">📝 查看错题</button>
+        </div>
+      </div>
+    `;
+    if (pct >= 80) confetti();
+    // Record test history
+    const history = Store.get('testHistory');
+    history.push({date:new Date().toISOString().slice(0,10), score:dictScore, total:dictTotal, mode:dictMode, unit:UNITS[dictUnitIdx].id});
+    if (history.length > 50) history.shift();
+    Store.set('testHistory', history);
+    // Auto check-in
+    const ds = new Date().toISOString().slice(0,10);
+    const checkins = Store.get('checkins');
+    if (!checkins[ds]) { checkins[ds] = true; Store.set('checkins', checkins); }
+    return;
+  }
+
+  let question, answerHint, inputType='text';
+  switch(dictMode) {
+    case 'en2zh':
+      question = word.w;
+      answerHint = word.m;
+      break;
+    case 'zh2en':
+      question = word.m;
+      answerHint = word.w;
+      break;
+    case 'colloc':
+      // Pick a random collocation and blank out a word
+      if (word.c.length > 0) {
+        const colloc = word.c[Math.floor(Math.random()*word.c.length)];
+        const parts = colloc[0].split(' ');
+        const blankIdx = Math.floor(Math.random()*Math.min(parts.length, 3));
+        const original = parts[blankIdx];
+        parts[blankIdx] = '______';
+        question = parts.join(' ');
+        answerHint = original + ' (' + colloc[1] + ')';
+      } else {
+        question = word.w;
+        answerHint = word.m;
+      }
+      break;
+  }
+
+  el.innerHTML = `
+    <h2 style="font-size:1.5rem;margin-bottom:12px">✍️ 默写模式</h2>
+
+    <div class="flex-row mb-2">
+      <select onchange="dictMode=this.value;renderDictation()">
+        <option value="en2zh" ${dictMode==='en2zh'?'selected':''}>英 → 中</option>
+        <option value="zh2en" ${dictMode==='zh2en'?'selected':''}>中 → 英</option>
+        <option value="colloc" ${dictMode==='colloc'?'selected':''}>搭配填空</option>
+      </select>
+      <span class="text-sm text-muted">Unit ${UNITS[dictUnitIdx].id}</span>
+      <span class="text-sm text-muted">${dictIdx+1}/${dictWords.length}</span>
+      <span class="text-sm" style="font-weight:700;color:var(--success)">✅ ${dictScore} | ❌ ${dictTotal-dictScore}</span>
+    </div>
+
+    <div class="dict-progress-bar">
+      <div class="dict-progress-fill" style="width:${(dictIdx/dictWords.length)*100}%"></div>
+    </div>
+
+    <div class="card text-center">
+      <div class="dict-word-display">${question}</div>
+      ${word.p ? `<div class="text-muted text-sm">${word.p}</div>` : ''}
+    </div>
+
+    <div class="mt-2">
+      <input type="${inputType}" class="dict-input" id="dictAnswer" placeholder="在此输入你的答案..." autocomplete="off" onkeydown="if(event.key==='Enter')submitDictAnswer()">
+    </div>
+
+    <div class="dict-feedback" id="dictFeedback"></div>
+
+    <div class="mt-2 flex-row" style="justify-content:center">
+      <button class="btn btn-primary" onclick="submitDictAnswer()" id="dictSubmitBtn">✅ 提交</button>
+      <button class="btn btn-outline" onclick="skipDictWord()">⏭ 跳过</button>
+    </div>
+
+    <div id="dictCorrectAnswer" class="mt-1 text-center" style="display:none">
+      <span class="text-muted">正确答案：</span>
+      <span style="font-weight:700;color:var(--success);font-size:1.2rem">${answerHint}</span>
+      ${word.c && word.c.length ? `<div class="mt-1 text-sm text-muted">搭配：${word.c.map(c=>c[0]).join('；')}</div>` : ''}
+    </div>
+  `;
+  dictAnswered = false;
+}
+
+function submitDictAnswer() {
+  if (dictAnswered) return;
+  const input = document.getElementById('dictAnswer');
+  if (!input) return;
+  const answer = input.value.trim();
+  if (!answer) { showToast('请输入答案','error'); return; }
+
+  const word = dictWords[dictIdx];
+  let correctAnswers = [];
+  switch(dictMode) {
+    case 'en2zh': correctAnswers = word.m.split('；').map(s=>s.trim()); break;
+    case 'zh2en': correctAnswers = [word.w]; break;
+    case 'colloc': correctAnswers = [document.getElementById('dictCorrectAnswer')?.querySelector('span:last-child')?.textContent?.split(' (')[0] || word.w]; break;
+  }
+
+  // Check answer (flexible matching for Chinese)
+  let isCorrect = false;
+  if (dictMode === 'en2zh') {
+    isCorrect = correctAnswers.some(ca => answer.includes(ca) || ca.includes(answer) || similarity(answer, ca) > 0.6);
+  } else {
+    isCorrect = correctAnswers.some(ca => ca.toLowerCase().trim() === answer.toLowerCase().trim());
+  }
+
+  dictTotal++;
+  if (isCorrect) {
+    dictScore++;
+    document.getElementById('dictFeedback').className = 'dict-feedback correct';
+    document.getElementById('dictFeedback').textContent = '✅ 正确！太棒了！';
+    // Update progress
+    const progress = Store.get('progress');
+    const key = wk(word);
+    if (progress[key] !== 'mastered') { progress[key] = 'learning'; Store.set('progress', progress); }
+  } else {
+    document.getElementById('dictFeedback').className = 'dict-feedback wrong';
+    document.getElementById('dictFeedback').textContent = '❌ 错误，请记住正确答案！';
+    // Add to errors
+    addToErrors(word);
+  }
+
+  document.getElementById('dictCorrectAnswer').style.display = 'block';
+  document.getElementById('dictSubmitBtn').disabled = true;
+  dictAnswered = true;
+
+  // Auto-advance after delay
+  setTimeout(() => { dictIdx++; renderDictation(); }, 2000);
+}
+
+function skipDictWord() {
+  dictIdx++;
+  renderDictation();
+}
+
+function similarity(a, b) {
+  // Simple character overlap for Chinese
+  const sa = new Set(a.split(''));
+  const sb = new Set(b.split(''));
+  const intersection = new Set([...sa].filter(x => sb.has(x)));
+  return intersection.size / Math.max(sa.size, sb.size);
+}
+
+function addToErrors(word) {
+  const errors = Store.get('errors');
+  const key = wk(word);
+  if (!errors[key]) errors[key] = {count:0, lastTime:'', history:[], word:word};
+  errors[key].count++;
+  errors[key].lastTime = new Date().toISOString();
+  errors[key].history.push({time:errors[key].lastTime, mode:dictMode});
+  if (errors[key].history.length > 20) errors[key].history.shift();
+  Store.set('errors', errors);
+}
+
+// ============ Error Notebook ============
+function renderErrors() {
+  const el = document.getElementById('tab-errors');
+  const errors = Store.get('errors');
+  const entries = Object.entries(errors).sort((a,b) => b[1].count - a[1].count);
+
+  if (entries.length === 0) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">🎉</div><h3>暂无错题</h3><p>继续加油，保持零错误！</p></div>`;
+    return;
+  }
+
+  el.innerHTML = `
+    <div class="flex-between mb-2">
+      <h2 style="font-size:1.5rem">📝 错题本</h2>
+      <div class="flex-row">
+        <span class="badge badge-danger">${entries.length} 题</span>
+        <button class="btn btn-sm btn-outline" onclick="retestErrors()">🔄 重测错题</button>
+        <button class="btn btn-sm btn-danger" onclick="clearErrors()">🗑 清空</button>
+      </div>
+    </div>
+
+    <div class="progress-bar mb-2">
+      <div class="progress-fill" style="width:${Math.max(5,100-entries.length)}%"></div>
+    </div>
+    <p class="text-sm text-muted mb-2">💡 连续答对3次的错题会自动移出</p>
+
+    ${entries.map(([key, err]) => {
+      const w = err.word || VOCAB_RAW.find(v => wk(v) === key) || {w:key, p:'', m:'', c:[]};
+      return `
+        <div class="error-item">
+          <span class="error-word">${w.w}</span>
+          <span class="text-sm text-muted">${w.m}</span>
+          <span class="error-count">错${err.count}次</span>
+          <span class="text-sm text-muted">${err.lastTime?err.lastTime.slice(0,10):''}</span>
+          <div class="error-actions">
+            <button class="btn btn-sm btn-outline" onclick="showWordDetail('${key}')">📋</button>
+            <button class="btn btn-sm btn-outline" onclick="removeError('${key}')">✕</button>
+          </div>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+function retestErrors() {
+  const errors = Store.get('errors');
+  const errorWords = Object.values(errors).map(e => e.word).filter(Boolean);
+  if (errorWords.length === 0) { showToast('没有错题可重测','info'); return; }
+  // Create a temporary unit
+  const tempUnitIdx = UNITS.length;
+  UNITS.push({id:'错题重测',title:'错题重测',words:errorWords});
+  startDictation(tempUnitIdx);
+  // Remove temp unit after use (hacky but works)
+  setTimeout(() => UNITS.pop(), 100);
+}
+
+function clearErrors() {
+  if (confirm('确定要清空所有错题记录吗？此操作不可撤销。')) {
+    Store.set('errors', {});
+    showToast('错题本已清空','info');
+    renderErrors();
+  }
+}
+
+function removeError(key) {
+  const errors = Store.get('errors');
+  delete errors[key];
+  Store.set('errors', errors);
+  renderErrors();
+  showToast('已移除错题','success');
+}
+
+function showWordDetail(key) {
+  const errors = Store.get('errors');
+  const err = errors[key];
+  const w = err?.word || VOCAB_RAW.find(v => wk(v) === key);
+  if (!w) return;
+
+  const overlay = document.getElementById('modalOverlay');
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <h3>📋 ${w.w}</h3>
+    <p><strong>词性：</strong>${w.p}</p>
+    <p><strong>释义：</strong>${w.m}</p>
+    <p><strong>错误次数：</strong>${err?.count||0}</p>
+    ${w.c && w.c.length ? `
+      <div style="margin-top:12px">
+        <strong>固定搭配：</strong>
+        ${w.c.map(c => `<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span style="color:var(--primary)">${c[0]}</span> — ${c[1]}</div>`).join('')}
+      </div>
+    ` : ''}
+    <button class="btn btn-primary mt-2" onclick="document.getElementById('modalOverlay').style.display='none'">关闭</button>
+  `;
+  overlay.style.display = 'flex';
+}
+
+// Close modal on overlay click
+document.addEventListener('click', function(e) {
+  if (e.target.id === 'modalOverlay') e.target.style.display = 'none';
+});
+
+// ============ Study Plan ============
+function renderPlan() {
+  const el = document.getElementById('tab-plan');
+  const checkins = Store.get('checkins');
+  const settings = Store.get('settings');
+  const dailyWords = settings.dailyWords || 28;
+
+  // Generate 50-day plan
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - 7); // Start a week ago for recent context
+
+  const days = [];
+  for (let i = 0; i < 56; i++) {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + i);
+    const ds = d.toISOString().slice(0,10);
+    const unitNum = (i % 50) + 1;
+    days.push({date:d, ds:ds, unitNum:unitNum, checked:!!checkins[ds], isToday:ds===new Date().toISOString().slice(0,10)});
+  }
+
+  // Count checked days
+  const totalChecked = Object.keys(checkins).length;
+  const streakDays = (() => {
+    let s = 0;
+    const today = new Date();
+    for (let d = new Date(today); ; d.setDate(d.getDate()-1)) {
+      if (checkins[d.toISOString().slice(0,10)]) s++;
+      else break;
+    }
+    return s;
+  })();
+
+  el.innerHTML = `
+    <h2 style="font-size:1.5rem;margin-bottom:16px">📅 学习计划</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">${totalChecked}</div>
+        <div class="stat-label">累计打卡天数</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-value">🔥 ${streakDays}</div>
+        <div class="stat-label">连续打卡</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${UNITS.length}</div>
+        <div class="stat-label">总单元数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${dailyWords}</div>
+        <div class="stat-label">每日词汇量</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">📋 50天背诵计划</div>
+      <p class="text-sm text-muted mb-2">每天完成一个单元的学习和默写即可打卡。点击下方日期可补打卡。</p>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px">
+        ${['一','二','三','四','五','六','日'].map(d => `<div style="text-align:center;font-size:.8rem;color:var(--text-muted);padding:4px">${d}</div>`).join('')}
+        ${days.map((d,i) => {
+          const level = d.checked ? (d.isToday ? 4 : Math.min(4, 1 + Math.floor(d.unitNum/15))) : 0;
+          return `<div class="heatmap-day" data-level="${level}" title="${d.ds}${d.checked?' ✅':''} Unit ${d.unitNum}" onclick="toggleCheckin('${d.ds}')" style="${d.isToday?'box-shadow:0 0 0 2px var(--primary);':''}"></div>`;
+        }).join('')}
+      </div>
+      <div class="flex-row" style="font-size:.8rem;gap:12px">
+        <span>⬜ 未打卡</span><span style="display:flex;align-items:center;gap:4px"><span class="heatmap-day" data-level="1"></span> 开始</span><span style="display:flex;align-items:center;gap:4px"><span class="heatmap-day" data-level="2"></span> 坚持</span><span style="display:flex;align-items:center;gap:4px"><span class="heatmap-day" data-level="3"></span> 过半</span><span style="display:flex;align-items:center;gap:4px"><span class="heatmap-day" data-level="4"></span> 完成</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">📖 单元进度（前20单元）</div>
+      ${UNITS.slice(0,20).map((u,i) => {
+        const progress = Store.get('progress');
+        const done = u.words.filter(w => progress[wk(w)] === 'mastered').length;
+        const pct = Math.round(done/u.words.length*100);
+        return `
+          <div class="mb-1">
+            <div class="progress-label"><span>Unit ${u.id}</span><span>${done}/${u.words.length} (${pct}%)</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+          </div>
+        `;
+      }).join('')}
+      ${UNITS.length > 20 ? `<p class="text-sm text-muted text-center mt-1">... 还有 ${UNITS.length-20} 个单元</p>` : ''}
+    </div>
+  `;
+}
+
+function toggleCheckin(ds) {
+  const checkins = Store.get('checkins');
+  if (checkins[ds]) {
+    delete checkins[ds];
+    showToast('已取消打卡','info');
+  } else {
+    checkins[ds] = true;
+    confetti();
+    showToast('打卡成功！🎉','success');
+  }
+  Store.set('checkins', checkins);
+  renderPlan();
+}
+
+// ============ Statistics ============
+function renderStats() {
+  const el = document.getElementById('tab-stats');
+  const progress = Store.get('progress');
+  const errors = Store.get('errors');
+  const testHistory = Store.get('testHistory');
+  const checkins = Store.get('checkins');
+
+  const total = VOCAB_RAW.length;
+  const mastered = Object.values(progress).filter(v=>v==='mastered').length;
+  const learning = Object.values(progress).filter(v=>v==='learning').length;
+  const errorCount = Object.keys(errors).length;
+
+  // Per-unit stats
+  const unitStats = UNITS.map((u,i) => {
+    const done = u.words.filter(w => progress[wk(w)]==='mastered').length;
+    const errorsInUnit = u.words.filter(w => errors[wk(w)]).length;
+    return {id:u.id, total:u.words.length, done, errors:errorsInUnit, pct:Math.round(done/u.words.length*100)};
+  });
+
+  // Recent accuracy trend
+  const trend = testHistory.slice(-10);
+
+  el.innerHTML = `
+    <h2 style="font-size:1.5rem;margin-bottom:16px">📊 学习统计</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">总词汇量</div></div>
+      <div class="stat-card success"><div class="stat-value">${mastered}</div><div class="stat-label">已掌握 (${Math.round(mastered/total*100)}%)</div></div>
+      <div class="stat-card accent"><div class="stat-value">${learning}</div><div class="stat-label">学习中</div></div>
+      <div class="stat-card danger"><div class="stat-value">${errorCount}</div><div class="stat-label">错题总数</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">📈 测试成绩趋势</div>
+      ${trend.length > 0 ? `
+        <div style="display:flex;align-items:flex-end;gap:8px;height:120px;padding:8px 0">
+          ${trend.map(t => {
+            const h = Math.max(10, Math.round(t.score/t.total*100));
+            return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end">
+              <span style="font-size:.7rem;font-weight:600">${h}%</span>
+              <div style="width:100%;max-width:30px;height:${h}%;background:${h>=80?'var(--success)':h>=60?'var(--accent)':'var(--danger)'};border-radius:4px 4px 0 0;min-height:${h}%"></div>
+              <span style="font-size:.6rem;color:var(--text-muted);margin-top:4px">${t.date.slice(5)}</span>
+            </div>`;
+          }).join('')}
+        </div>
+      ` : '<p class="text-muted text-sm">暂无测试数据，快去默写吧！</p>'}
+    </div>
+
+    <div class="card">
+      <div class="card-header">📋 各单元掌握度</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px">
+        ${unitStats.map(u => `
+          <div style="padding:8px 12px;background:var(--bg);border-radius:var(--radius-sm)">
+            <div class="flex-between">
+              <span style="font-weight:600;font-size:.9rem">Unit ${u.id}</span>
+              <span class="badge ${u.pct>=80?'badge-success':u.pct>=50?'badge-accent':'badge-danger'}">${u.pct}%</span>
+            </div>
+            <div class="progress-bar mt-1"><div class="progress-fill" style="width:${u.pct}%"></div></div>
+            <div class="flex-between text-sm text-muted mt-1"><span>${u.done}/${u.total} 掌握</span><span>${u.errors} 错题</span></div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ============ Search ============
+let searchTimeout;
+function renderSearch() {
+  const el = document.getElementById('tab-search');
+  el.innerHTML = `
+    <h2 style="font-size:1.5rem;margin-bottom:16px">🔍 全局搜索</h2>
+    <input type="text" class="search-box" id="searchInput" placeholder="输入英文单词或中文意思搜索..." oninput="doSearch()" autofocus>
+    <div id="searchResults" class="search-results">
+      <p class="text-muted text-center">输入关键词开始搜索 ${VOCAB_RAW.length} 个词汇</p>
+    </div>
+  `;
+}
+
+function doSearch() {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => {
+    const q = document.getElementById('searchInput')?.value?.trim().toLowerCase();
+    const resultsEl = document.getElementById('searchResults');
+    if (!resultsEl) return;
+
+    if (!q) {
+      resultsEl.innerHTML = '<p class="text-muted text-center">输入关键词开始搜索</p>';
+      return;
+    }
+
+    const results = VOCAB_RAW.filter(v =>
+      v.w.toLowerCase().includes(q) ||
+      v.m.includes(q) ||
+      v.c.some(c => c[0].toLowerCase().includes(q) || c[1].includes(q))
+    ).slice(0, 50);
+
+    if (results.length === 0) {
+      resultsEl.innerHTML = '<p class="text-muted text-center">未找到匹配的词汇</p>';
+      return;
+    }
+
+    resultsEl.innerHTML = results.map(v => `
+      <div class="search-item" onclick="showWordDetailDirect('${v.w}')">
+        <div>
+          <span class="sword">${highlightMatch(v.w, q)}</span>
+          <span class="badge badge-primary">${v.p}</span>
+          <span class="smeaning">${highlightMatch(v.m, q)}</span>
+        </div>
+        <div class="scollocs">${v.c.slice(0,3).map(c=>highlightMatch(c[0]+' '+c[1], q)).join(' | ')}${v.c.length>3?' ...':''}</div>
+      </div>
+    `).join('');
+  }, 300);
+}
+
+function highlightMatch(text, q) {
+  const idx = text.toLowerCase().indexOf(q.toLowerCase());
+  if (idx === -1) return text;
+  return text.slice(0, idx) + '<mark style="background:var(--accent-light);padding:1px 2px;border-radius:2px">' + text.slice(idx, idx+q.length) + '</mark>' + text.slice(idx+q.length);
+}
+
+function showWordDetailDirect(wordKey) {
+  const w = VOCAB_RAW.find(v => wk(v) === wk(wordKey));
+  if (!w) return;
+  const errors = Store.get('errors');
+  const err = errors[wk(w)];
+
+  const overlay = document.getElementById('modalOverlay');
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <h3>📋 ${w.w} <span class="badge badge-primary">${w.p}</span></h3>
+    <p><strong>释义：</strong>${w.m}</p>
+    ${err ? `<p><strong>错题记录：</strong>错误 <span class="badge badge-danger">${err.count}</span> 次</p>` : ''}
+    ${w.c && w.c.length ? `
+      <div style="margin-top:12px">
+        <strong>固定搭配：</strong>
+        ${w.c.map(c => `<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span style="color:var(--primary);font-weight:500">${c[0]}</span> — ${c[1]}</div>`).join('')}
+      </div>
+    ` : ''}
+    <div class="flex-row mt-2">
+      <button class="btn btn-primary" onclick="document.getElementById('modalOverlay').style.display='none'">关闭</button>
+      <button class="btn btn-outline btn-sm" onclick="markWord('${wk(w)}','mastered');document.getElementById('modalOverlay').style.display='none'">✅ 标记已掌握</button>
+    </div>
+  `;
+  overlay.style.display = 'flex';
+}
+
+// ============ Settings Modal ============
+function showSettings() {
+  const settings = Store.get('settings');
+  const overlay = document.getElementById('modalOverlay');
+  const box = document.getElementById('modalBox');
+  box.innerHTML = `
+    <h3>⚙️ 设置</h3>
+    <div class="setting-row">
+      <span>🌓 深色模式</span>
+      <div class="toggle-switch ${settings.theme==='dark'?'on':''}" onclick="toggleTheme()" id="themeSwitch"></div>
+    </div>
+    <div class="setting-row">
+      <span>📝 每日学习词汇量</span>
+      <select onchange="updateDailyWords(this.value)" style="width:100px">
+        <option value="20" ${settings.dailyWords===20?'selected':''}>20词</option>
+        <option value="28" ${settings.dailyWords===28?'selected':''}>28词</option>
+        <option value="35" ${settings.dailyWords===35?'selected':''}>35词</option>
+        <option value="50" ${settings.dailyWords===50?'selected':''}>50词</option>
+      </select>
+    </div>
+    <div class="setting-row">
+      <span>📤 导出学习数据</span>
+      <button class="btn btn-sm btn-outline" onclick="exportData()">导出 JSON</button>
+    </div>
+    <div class="setting-row">
+      <span>📥 导入学习数据</span>
+      <button class="btn btn-sm btn-outline" onclick="document.getElementById('importFile').click()">导入 JSON</button>
+      <input type="file" id="importFile" style="display:none" accept=".json" onchange="importData(event)">
+    </div>
+    <div class="setting-row">
+      <span style="color:var(--danger)">🗑 重置所有进度</span>
+      <button class="btn btn-sm btn-danger" onclick="resetAll()">重置</button>
+    </div>
+    <button class="btn btn-primary mt-2" style="width:100%" onclick="document.getElementById('modalOverlay').style.display='none'">关闭</button>
+  `;
+  overlay.style.display = 'flex';
+}
+
+function toggleTheme() {
+  const settings = Store.get('settings');
+  settings.theme = settings.theme === 'dark' ? 'light' : 'dark';
+  Store.set('settings', settings);
+  document.body.setAttribute('data-theme', settings.theme);
+  const sw = document.getElementById('themeSwitch');
+  if (sw) sw.classList.toggle('on');
+}
+
+function updateDailyWords(n) {
+  const settings = Store.get('settings');
+  settings.dailyWords = parseInt(n);
+  Store.set('settings', settings);
+  showToast('每日词汇量已更新','success');
+}
+
+function exportData() {
+  const data = {
+    progress: Store.get('progress'),
+    errors: Store.get('errors'),
+    checkins: Store.get('checkins'),
+    testHistory: Store.get('testHistory'),
+    settings: Store.get('settings'),
+    exportDate: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'vocab-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('数据已导出','success');
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (data.progress) Store.set('progress', data.progress);
+      if (data.errors) Store.set('errors', data.errors);
+      if (data.checkins) Store.set('checkins', data.checkins);
+      if (data.testHistory) Store.set('testHistory', data.testHistory);
+      if (data.settings) Store.set('settings', data.settings);
+      // Apply theme
+      document.body.setAttribute('data-theme', data.settings?.theme || 'light');
+      showToast('数据导入成功！','success');
+      switchTab('dashboard');
+    } catch(err) {
+      showToast('导入失败：文件格式错误','error');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function resetAll() {
+  if (confirm('确定要重置所有学习进度、错题记录和打卡数据吗？\n\n⚠️ 此操作不可撤销！')) {
+    Store.remove('progress');
+    Store.remove('errors');
+    Store.remove('checkins');
+    Store.remove('testHistory');
+    initStore();
+    showToast('所有数据已重置','info');
+    switchTab('dashboard');
+  }
+}
+
+// ============ Initialization ============
+function init() {
+  initStore();
+
+  // Apply theme
+  const settings = Store.get('settings');
+  document.body.setAttribute('data-theme', settings.theme || 'light');
+
+  // Tab navigation
+  document.querySelectorAll('.nav-tab').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+  document.querySelectorAll('.mnav-tab').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  // Theme toggle button
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+  // Settings button
+  document.getElementById('settingsBtn').addEventListener('click', showSettings);
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+    switch(e.key) {
+      case '1': switchTab('dashboard'); break;
+      case '2': switchTab('study'); break;
+      case '3': switchTab('dictation'); break;
+      case '4': switchTab('errors'); break;
+      case '5': switchTab('plan'); break;
+      case '6': switchTab('stats'); break;
+      case '7': switchTab('search'); break;
+    }
+  });
+
+  // Initial render
+  switchTab('dashboard');
+}
+
+// Boot
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

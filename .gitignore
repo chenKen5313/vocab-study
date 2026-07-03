@@ -1,0 +1,7 @@
+node_modules/
+src/
+generate_handout.js
+build.js
+package.json
+package-lock.json
+/tmp/
