@@ -674,17 +674,49 @@ function submitDictAnswer() {
   const word = dictWords[dictIdx];
   let correctAnswers = [];
   switch(dictMode) {
-    case 'en2zh': correctAnswers = word.m.split('；').map(s=>s.trim()); break;
+    case 'en2zh':
+      // Split by multiple delimiters for more matching options
+      correctAnswers = word.m.split(/[；;；、，,//]+/).map(s=>s.trim()).filter(Boolean);
+      break;
     case 'zh2en': correctAnswers = [word.w]; break;
     case 'colloc': correctAnswers = [document.getElementById('dictCorrectAnswer')?.querySelector('span:last-child')?.textContent?.split(' (')[0] || word.w]; break;
   }
 
-  // Check answer (flexible matching for Chinese)
+  // Check answer
   let isCorrect = false;
+  let isClose = false;
+  const userAnswer = dictMode === 'zh2en' ? answer.toLowerCase().trim() : answer;
+
   if (dictMode === 'en2zh') {
-    isCorrect = correctAnswers.some(ca => answer.includes(ca) || ca.includes(answer) || similarity(answer, ca) > 0.6);
+    // 1. Exact match
+    isCorrect = correctAnswers.some(ca => userAnswer === ca);
+    // 2. Contains match (answer contains a correct answer or vice versa)
+    if (!isCorrect) {
+      isCorrect = correctAnswers.some(ca => userAnswer.includes(ca) || ca.includes(userAnswer));
+    }
+    // 3. Bigram similarity for close semantic match
+    if (!isCorrect) {
+      const bestSim = Math.max(...correctAnswers.map(ca => chineseSimilarity(userAnswer, ca)));
+      if (bestSim >= 0.4) isCorrect = true;
+      else if (bestSim >= 0.25) isClose = true;
+    }
+    // 4. Any single character match for short answers (lenient)
+    if (!isCorrect && !isClose && userAnswer.length <= 4) {
+      const userChars = new Set([...userAnswer]);
+      isClose = correctAnswers.some(ca => [...ca].some(ch => userChars.has(ch)));
+    }
+  } else if (dictMode === 'zh2en') {
+    isCorrect = correctAnswers.some(ca => ca.toLowerCase().trim() === userAnswer);
+    // Allow minor spelling variation (~1 char difference)
+    if (!isCorrect) {
+      isCorrect = correctAnswers.some(ca => {
+        const c = ca.toLowerCase().trim();
+        return levenshtein(userAnswer, c) <= Math.min(2, Math.floor(c.length * 0.3));
+      });
+    }
   } else {
-    isCorrect = correctAnswers.some(ca => ca.toLowerCase().trim() === answer.toLowerCase().trim());
+    // colloc mode
+    isCorrect = correctAnswers.some(ca => ca.toLowerCase().trim() === userAnswer.toLowerCase().trim());
   }
 
   dictTotal++;
@@ -692,14 +724,19 @@ function submitDictAnswer() {
     dictScore++;
     document.getElementById('dictFeedback').className = 'dict-feedback correct';
     document.getElementById('dictFeedback').textContent = '✅ 正确！太棒了！';
-    // Update progress
+    const progress = Store.get('progress');
+    const key = wk(word);
+    if (progress[key] !== 'mastered') { progress[key] = 'learning'; Store.set('progress', progress); }
+  } else if (isClose) {
+    dictScore++;
+    document.getElementById('dictFeedback').className = 'dict-feedback correct';
+    document.getElementById('dictFeedback').textContent = '👍 意思接近，也算正确！请查看标准答案。';
     const progress = Store.get('progress');
     const key = wk(word);
     if (progress[key] !== 'mastered') { progress[key] = 'learning'; Store.set('progress', progress); }
   } else {
     document.getElementById('dictFeedback').className = 'dict-feedback wrong';
     document.getElementById('dictFeedback').textContent = '❌ 错误，请记住正确答案！';
-    // Add to errors
     addToErrors(word);
   }
 
@@ -707,8 +744,7 @@ function submitDictAnswer() {
   document.getElementById('dictSubmitBtn').disabled = true;
   dictAnswered = true;
 
-  // Auto-advance after delay
-  setTimeout(() => { dictIdx++; renderDictation(); }, 2000);
+  setTimeout(() => { dictIdx++; renderDictation(); }, 2500);
 }
 
 function skipDictWord() {
@@ -716,12 +752,24 @@ function skipDictWord() {
   renderDictation();
 }
 
-function similarity(a, b) {
-  // Simple character overlap for Chinese
-  const sa = new Set(a.split(''));
-  const sb = new Set(b.split(''));
-  const intersection = new Set([...sa].filter(x => sb.has(x)));
-  return intersection.size / Math.max(sa.size, sb.size);
+function chineseSimilarity(a, b) {
+  // Bigram-based similarity for better Chinese semantic matching
+  if (a === b) return 1;
+  if (!a || !b) return 0;
+  const bigrams = s => { const r=[]; for(let i=0;i<s.length-1;i++) r.push(s.slice(i,i+2)); return new Set(r); };
+  const ba = bigrams(a), bb = bigrams(b);
+  if (ba.size === 0 && bb.size === 0) return 0;
+  const inter = new Set([...ba].filter(x => bb.has(x)));
+  return inter.size / Math.max(ba.size, bb.size);
+}
+
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({length:m+1}, (_,i) => [i]);
+  for (let j=0;j<=n;j++) dp[0][j] = j;
+  for (let i=1;i<=m;i++) for (let j=1;j<=n;j++)
+    dp[i][j] = Math.min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return dp[m][n];
 }
 
 function addToErrors(word) {
